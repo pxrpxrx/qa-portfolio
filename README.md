@@ -1,2 +1,2 @@
 # qa-portfolio
-Here is my cases of vibecoding and testing of it
+Here are my cases of vibecoding and testing of it
