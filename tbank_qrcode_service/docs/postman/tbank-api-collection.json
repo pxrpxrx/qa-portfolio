@@ -8,51 +8,28 @@
       "name": "Init Payment and Get QR",
       "request": {
         "method": "GET",
-        "url": {
-          "raw": "{{base_url}}/api/sbp/init-and-qr?userId={{user_id}}&amount={{amount}}",
-          "query": [
-            {"key": "userId", "value": "{{user_id}}"},
-            {"key": "amount", "value": "{{amount}}"}
-          ]
-        }
+        "url": "{{base_url}}/api/sbp/init-and-qr?userId={{user_id}}&amount={{amount}}"
       }
     },
     {
       "name": "Init Payment - Missing UserId",
       "request": {
         "method": "GET",
-        "url": {
-          "raw": "{{base_url}}/api/sbp/init-and-qr?amount={{amount}}",
-          "query": [
-            {"key": "amount", "value": "{{amount}}"}
-          ]
-        }
+        "url": "{{base_url}}/api/sbp/init-and-qr?amount={{amount}}"
       }
     },
     {
       "name": "Init Payment - Zero Amount",
       "request": {
         "method": "GET",
-        "url": {
-          "raw": "{{base_url}}/api/sbp/init-and-qr?userId={{user_id}}&amount=0",
-          "query": [
-            {"key": "userId", "value": "{{user_id}}"},
-            {"key": "amount", "value": "0"}
-          ]
-        }
+        "url": "{{base_url}}/api/sbp/init-and-qr?userId={{user_id}}&amount=0"
       }
     },
     {
       "name": "Init Payment - Negative Amount",
       "request": {
         "method": "GET",
-        "url": {
-          "raw": "{{base_url}}/api/sbp/init-and-qr?userId={{user_id}}&amount=-100",
-          "query": [
-            {"key": "userId", "value": "{{user_id}}"},
-            {"key": "amount", "value": "-100"}
-          ]
-        }
+        "url": "{{base_url}}/api/sbp/init-and-qr?userId={{user_id}}&amount=-100"
       }
     },
     {
@@ -72,7 +49,7 @@
     }
   ],
   "variable": [
-    {"key": "base_url", "value": "http://208.92.226.223:8080"},
+    {"key": "base_url", "value": "http://localhost:8080"},
     {"key": "user_id", "value": "test_user_001"},
     {"key": "amount", "value": "100.50"},
     {"key": "order_id", "value": "order-xxxxxxxx-xxxx"}
