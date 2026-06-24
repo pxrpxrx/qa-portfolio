@@ -37,6 +37,17 @@
 - DBeaver (PostgreSQL, SQLite)
 - ruff (линтер)
 
+## Результаты тестирования
+
+Подробный отчёт: [tests-results/GLOBAL-TEST-REPORT.md](./tests-results/GLOBAL-TEST-REPORT.md)
+
+| Проект | Тесты | Статус |
+|--------|-------|--------|
+| exchanger_bot | 17 pytest | ✅ 17/17 |
+| fractal_trader_bot | 25 pytest | ✅ 25/25 |
+| trader_assistant_bot | 132 pytest | ✅ 132/132 |
+| arbit_bot | 8 JS | ⚠️ 4/8 (pre-existing issues) |
+
 ## Контакты
 
 - **Автор:** Константин Горбунов

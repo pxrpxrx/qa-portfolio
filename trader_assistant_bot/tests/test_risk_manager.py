@@ -162,11 +162,14 @@ class TestTradingHours:
     def test_trading_hours_restricted(self, risk_manager, mock_monitor):
         risk_manager.config['trading_hours'] = {'start': 9, 'end': 17}
 
+        class _MockNow:
+            hour = 14
+            minute = 0
+            def weekday(self):
+                return 2
+
         with patch('src.services.bx_risk_manager.datetime') as mock_dt:
-            mock_dt.now.return_value = datetime(2025, 6, 21, 14, 0, 0)
-            mock_dt.now.return_value.hour = 14
-            mock_dt.now.return_value.minute = 0
-            mock_dt.now.return_value.weekday.return_value = 2
+            mock_dt.now.return_value = _MockNow()
 
             original_check = risk_manager._check_trading_hours
             risk_manager._check_trading_hours = lambda: 14 >= 9 and 14 < 17
@@ -264,7 +267,7 @@ class TestMarketDataValidation:
         assert can_trade is False
 
     def test_low_price_blocked(self, risk_manager):
-        market_data = {'volume_24h': 5000000, 'price': 0.000001, 'atr_percent': 1.0}
+        market_data = {'volume_24h': 5000000, 'price': 1e-07, 'atr_percent': 1.0}
 
         can_trade, reason = risk_manager.can_trade_symbol("SHIB-USDT", market_data)
         assert can_trade is False

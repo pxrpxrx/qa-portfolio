@@ -1,5 +1,14 @@
 import pytest
+import sys
+from pathlib import Path
 from typing import Dict, List
+
+# Добавляем src со всеми поддиректориями в sys.path
+_src_root = Path(__file__).parent.parent / "src"
+for _d in [_src_root] + [p for p in _src_root.rglob("*") if p.is_dir()]:
+    _d_str = str(_d)
+    if _d_str not in sys.path:
+        sys.path.insert(0, _d_str)
 
 
 @pytest.fixture

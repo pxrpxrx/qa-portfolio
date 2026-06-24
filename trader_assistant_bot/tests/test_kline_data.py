@@ -265,15 +265,18 @@ class TestRequestMethod:
 
     @patch('requests.get')
     def test_request_timeout(self, mock_get, kline_client):
-        mock_get.side_effect = Exception("Timeout")
+        import requests
+        mock_get.side_effect = requests.exceptions.ConnectionError("Timeout")
 
         result = kline_client._request('/test')
         assert result is None
 
     @patch('requests.get')
     def test_request_retry_on_failure(self, mock_get, kline_client):
+        import requests
+        from unittest.mock import MagicMock
         mock_get.side_effect = [
-            Exception("Network error"),
+            requests.exceptions.ConnectionError("Network error"),
             MagicMock(status_code=200, json=lambda: {'code': 0, 'data': ['ok']})
         ]
 

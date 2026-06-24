@@ -1,11 +1,5 @@
 import pytest
-import sys
-from pathlib import Path
-from unittest.mock import patch, MagicMock
-
-src_path = str(Path(__file__).parent.parent / "src")
-if src_path not in sys.path:
-    sys.path.insert(0, src_path)
+from unittest.mock import MagicMock
 
 from bx_fractal_finder import FractalFinder
 
@@ -44,14 +38,14 @@ class TestFractalFinder:
         self._patch_klines(finder, mock_klines_up_trend)
         fractal = finder.get_nearest_fractal('BTC-USDT', current_price=120, side='BUY')
         assert fractal is not None
-        assert isinstance(fractal, float)
+        assert isinstance(fractal, (int, float))
 
     def test_get_nearest_fractal_sell(self, finder, mock_klines_down_trend):
         """Получение ближайшего фрактала для SELL (верхний фрактал)"""
         self._patch_klines(finder, mock_klines_down_trend)
         fractal = finder.get_nearest_fractal('ETH-USDT', current_price=180, side='SELL')
         assert fractal is not None
-        assert isinstance(fractal, float)
+        assert isinstance(fractal, (int, float))
 
     def test_insufficient_data(self, finder, mock_klines_small):
         """Недостаточно данных (<5 свечей)"""

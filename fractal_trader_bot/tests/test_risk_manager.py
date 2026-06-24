@@ -1,12 +1,6 @@
 import pytest
-import sys
 import json
-from pathlib import Path
 from datetime import datetime
-
-src_path = str(Path(__file__).parent.parent / "src")
-if src_path not in sys.path:
-    sys.path.insert(0, src_path)
 
 from bx_risk_manager import RiskManager
 

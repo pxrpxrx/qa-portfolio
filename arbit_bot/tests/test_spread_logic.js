@@ -1,7 +1,3 @@
-
-### 📄 test_spread_logic.js
-
-```javascript
 /**
  * Тесты для проверки логики расчета спреда
  * Запуск: node test_spread_logic.js

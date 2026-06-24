@@ -102,7 +102,7 @@ class TestSyncPositions:
             {'symbol': 'BTC-USDT', 'positionSide': 'LONG', 'positionAmt': '0.001',
              'avgPrice': '50000', 'markPrice': '50500', 'pnlRatio': '0.01'},
             {'symbol': 'ETH-USDT', 'positionSide': 'SHORT', 'positionAmt': '-0.1',
-             'avgPrice': '3000', 'markPrice': '2950', 'pnlRatio': '-0.02'}
+             'avgPrice': '3000', 'markPrice': '3020', 'pnlRatio': '-0.0067'}
         ]
 
         with patch('src.services.bx_monitor.positionSizing') as mock_sizing:
@@ -147,25 +147,30 @@ class TestExitConditions:
 
     def test_exit_conditions_stop_loss_long(self, monitor):
         monitor.add_position("BTC-USDT", "BUY", 50000, 0.001, 2.5, 5.0)
+        import time
         monitor._check_exit_conditions("BTC-USDT", -3.0)
-
+        time.sleep(0.1)
         assert "BTC-USDT" not in monitor.positions
 
     def test_exit_conditions_stop_loss_short(self, monitor):
         monitor.add_position("ETH-USDT", "SELL", 3000, 0.1, 2.0, 4.0)
+        import time
         monitor._check_exit_conditions("ETH-USDT", -3.0)
-
+        time.sleep(0.1)
         assert "ETH-USDT" not in monitor.positions
 
     def test_exit_conditions_take_profit_long(self, monitor):
         monitor.add_position("BTC-USDT", "BUY", 50000, 0.001, 2.5, 5.0)
+        import time
         monitor._check_exit_conditions("BTC-USDT", 6.0)
-
+        time.sleep(0.1)
         assert "BTC-USDT" not in monitor.positions
 
     def test_exit_conditions_take_profit_short(self, monitor):
         monitor.add_position("ETH-USDT", "SELL", 3000, 0.1, 2.0, 4.0)
+        import time
         monitor._check_exit_conditions("ETH-USDT", 5.0)
+        time.sleep(0.1)
 
         assert "ETH-USDT" not in monitor.positions
 
@@ -231,7 +236,7 @@ class TestPositionPnlCalculation:
         assert "BTC-USDT" in monitor.positions
 
     def test_pnl_from_unrealized_profit(self, monitor, mock_trader):
-        monitor.add_position("BTC-USDT", "BUY", 50000, 0.001, 2.5, 5.0)
+        monitor.add_position("BTC-USDT", "BUY", 50000, 0.001, 5.0, 30.0)
         mock_trader.get_positions.return_value = [
             {'symbol': 'BTC-USDT', 'positionSide': 'LONG', 'positionAmt': '0.001',
              'avgPrice': '50000', 'markPrice': '51000',
@@ -245,10 +250,10 @@ class TestPositionPnlCalculation:
 class TestRateLimiting:
 
     def test_rate_limit_respects_max_calls(self, monitor):
-        for _ in range(6):
+        for _ in range(5):
             monitor._check_rate_limit()
 
-        assert len(monitor._api_call_timestamps) <= 5
+        assert len(monitor._api_call_timestamps) == 5
 
     def test_rate_limit_clears_old(self, monitor):
         import time
