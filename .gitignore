@@ -29,3 +29,7 @@ target/
 
 # Docker
 docker-data/
+
+# Allure (auto-generated test reports, never commit raw results)
+allure-results/
+**/allure-results/

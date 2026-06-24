@@ -22,3 +22,6 @@ application.properties
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Allure
+allure-results/

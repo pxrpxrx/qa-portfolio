@@ -36,6 +36,9 @@ coverage.xml
 .pytest_cache/
 test-results/
 
+# Allure
+allure-results/
+
 # OS
 .DS_Store
 Thumbs.db

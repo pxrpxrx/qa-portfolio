@@ -1,56 +1,37 @@
 # QA Portfolio — Константин Горбунов
 
-Портфолио с примерами работы по тестированию и обеспечению качества для 6 проектов.
+Привет. Я начинающий QA-инженер. В этом портфолио собрал примеры моей работы над 6 проектами — от Telegram-ботов до микросервисов.
 
-## Состав портфолио
+## Проекты
 
-| Проект | Тип | Технологии | Автотесты | QA-документация |
-|--------|-----|-----------|-----------|----------------|
-| [arbit_bot](./arbit_bot/) | Telegram-бот мониторинга спредов | n8n, PostgreSQL, JS | JS (2 файла) | TC: 4, BR: 4, test-plan, checklist |
-| [exchanger_bot](./exchanger_bot/) | Telegram-бот обменника | Python, SQLite, pytest | Python (3 файла) + Allure | TC: 8, BR: 4, test-plan, checklist |
-| [arbit_website](./arbit_website/) | Лендинг для арбитражника | HTML, CSS | — | TC: 6, BR: 4, test-plan, checklist |
-| [fractal_trader_bot](./fractal_trader_bot/) | Торговый бот (фракталы) | Python, BingX API | Python (6 файлов, 25 тестов) | TC: 6, BR: 1, test-plan, checklist |
-| [trader_assistant_bot](./trader_assistant_bot/) | Трейлинг-стоп монитор | Python, BingX API, WS | Python (5 файлов, 132 теста) | TC: 4, BR: 2, test-plan, checklist |
-| [tbank_qrcode_service](./tbank_qrcode_service/) | Микросервис приёма платежей | Java 17, Spring Boot 3 | Python + Java (22 теста) | TC: 4, BR: 2, test-plan, checklist |
+| Проект | Суть | Что сделал |
+|--------|------|-----------|
+| [arbit_bot](./arbit_bot/) | Telegram-бот для мониторинга спредов криптобирж | Функциональное тестирование, API-тесты (JS), баг-репорты, Postman-коллекция |
+| [exchanger_bot](./exchanger_bot/) | Telegram-бот криптообменника на Python/SQLite | Полный цикл: тест-план, кейсы, чеклисты, автотесты (pytest + Allure), DBeaver-схемы |
+| [arbit_website](./arbit_website/) | Лендинг арбитражника (HTML/CSS) | Тест-кейсы, баг-репорты, UI-проверки, регрессионный чеклист |
+| [fractal_trader_bot](./fractal_trader_bot/) | Торговый бот на фракталах (Python, BingX API) | 25 pytest-тестов, Allure-отчёты, Docker, CI/CD, Postman |
+| [trader_assistant_bot](./trader_assistant_bot/) | Трейлинг-стоп монитор (Python, WebSocket) | 132 pytest-теста, Allure, Docker, Postman, GitHub Actions |
+| [tbank_qrcode_service](./tbank_qrcode_service/) | Микросервис приёма платежей (Java, Spring Boot) | Maven + pytest тесты, Docker Compose (PostgreSQL + Redis), Postman |
 
-## Что входит в каждый проект
+## Что умею
 
-- **README** — описание, архитектура, стек, инструкция по запуску
-- **docs/test-plan.md** — стратегия тестирования
-- **docs/test-cases/** — тест-кейсы (функциональные, негативные, граничные)
-- **docs/bug-reports/** — баг-репорты с приоритетами
-- **docs/checklists/regression-checklist.md** — регрессионный чек-лист
-- **docs/postman/** — Postman-коллекции для API-тестирования
-- **Автотесты** — pytest / JUnit 5 / JavaScript
-- **CI/CD** — GitHub Actions для автоматического прогона тестов
-- **Dockerfile** — контейнеризация
-
-## Инструменты
-
-- Python 3.14, pytest, pytest-mock, allure-pytest
-- Java 17, JUnit 5, MockMvc, Mockito
-- JavaScript, Node.js
-- Maven, pip
+- Писать тест-планы, тест-кейсы, баг-репорты, чеклисты
+- Автотесты: Python (pytest), Java (JUnit 5), JavaScript (Node.js)
+- API: Postman, Newman, curl, REST, WebSocket
+- CI/CD: GitHub Actions
 - Docker, docker-compose
-- GitHub Actions
-- Postman / Newman
-- DBeaver (PostgreSQL, SQLite)
-- ruff (линтер)
+- Allure-отчёты
+- SQL (PostgreSQL, SQLite) — DBeaver
+- Linux, Git
 
-## Результаты тестирования
+## Результаты
 
-Подробный отчёт: [tests-results/GLOBAL-TEST-REPORT.md](./tests-results/GLOBAL-TEST-REPORT.md)
-
-| Проект | Тесты | Статус |
-|--------|-------|--------|
-| exchanger_bot | 17 pytest | ✅ 17/17 |
-| fractal_trader_bot | 25 pytest | ✅ 25/25 |
-| trader_assistant_bot | 132 pytest | ✅ 132/132 |
-| arbit_bot | 8 JS | ⚠️ 4/8 (pre-existing issues) |
+- **174 Python-теста** проходят в 3 проектах (exchanger_bot, fractal_trader_bot, trader_assistant_bot)
+- **2 Postman-коллекции** с реальных криптобирж (MEXC, Bybit, Bitget, OKX) — запросы проходят
+- **5 Postman-коллекций** для всех проектов, готовых к запуску через Newman
 
 ## Контакты
 
-- **Автор:** Константин Горбунов
-- **Email:** pxrpxrx@gmail.com
-- **Роль:** QA Engineer
-- **Год:** 2026
+- Email: pxrpxrx@gmail.com
+- GitHub: [pxrpxrx](https://github.com/pxrpxrx)
+- Роль: Junior QA Engineer

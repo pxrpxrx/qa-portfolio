@@ -46,6 +46,9 @@ coverage.xml
 # pytest
 .pytest_cache/
 
+# Allure
+allure-results/
+
 # Temp files
 tmp/
 temp/
