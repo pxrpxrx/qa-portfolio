@@ -1,0 +1,654 @@
+:root {
+  --max-width: 1200px;
+  --accent: #008c7c;
+  --muted: #777;
+  --color-background-light: #f5f5f5;
+  --color-text-dark: #333;
+  --color-shadow: rgba(0,0,0,0.08);
+  --card-bg: #fff;
+  --text-color: #111;
+}
+
+/* ===== БАЗОВАЯ СТИЛИСТИКА ===== */
+* { box-sizing: border-box; }
+body {
+  font-family: "Manrope", Inter, Arial, sans-serif !important;
+  margin: 0;
+  color: #222;
+  background: #fff;
+  line-height: 1.4;
+}
+
+/* ===== КОНТЕЙНЕР ===== */
+.container { width: 90%; max-width: var(--max-width); margin: 0 auto; }
+
+/* ===== HEADER ===== */
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+}
+.logo img { width: 100px; height: auto; }
+.topnav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 14px;
+}
+.topnav a:hover { color: var(--accent); }
+.cta {
+  background: var(--accent);
+  color: #fff;
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 14px;
+}
+.cta:hover { background: #007568; }
+
+/* ===== HERO ===== */
+.hero { padding: 30px 0 10px; }
+.hero-title {
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-size: 4rem;
+  text-align: center;
+  margin: 8px 0;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: #111;
+}
+.hero-media {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.hero-media img {
+  width: 100%;
+  max-width: 980px;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* ===== СЕКЦИИ ===== */
+.section { padding: 30px 0; }
+.muted { color: var(--muted); }
+
+/* ===== GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 18px;
+}
+.card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: transform .25s ease, box-shadow .25s ease !important;
+}
+.card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 0 20px rgba(0,255,210,0.25);
+}
+
+.interface-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+/* Левая колонка с картинкой */
+.exch {
+  flex: 1;
+}
+
+.exch img {
+  width: 450px;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
+
+
+/* Правая колонка — текст */
+.interface-grid {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 20px;
+}
+
+.interface-grid li {
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 1rem;
+  color: #555;
+  list-style-position: inside;
+}
+
+.interface-grid li:last-child {
+  border-bottom: none;
+}
+
+.interface-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Адаптив для блока Биржи */
+@media (max-width: 768px) {
+  .interface-flex {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: left;
+  }
+
+  .exch img {
+    width: 100% !important;
+    max-width: 500px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .interface-grid {
+    width: 100%;
+    padding-left: 0;
+  }
+}
+
+
+/* Адаптив для блока Спреда */
+@media (max-width: 768px) {
+  .spread-flex {
+    flex-direction: column-reverse !important;
+    align-items: center !important;
+    text-align: left;
+  }
+
+  .spread-img img {
+    width: 100% !important;
+    max-width: 500px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .spread-list {
+    width: 100%;
+    padding-left: 0;
+  }
+}
+
+
+/* Верстка второго блока (spread) */
+.spread-flex {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  margin-top: 40px;
+}
+
+.spread-list {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+}
+
+.spread-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+  list-style-position: inside;
+  color: #555;
+}
+
+.spread-list li:last-child {
+  border-bottom: none;
+}
+
+.spread-img img {
+  width: 450px;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .spread-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .spread-img img {
+    max-width: 500px;
+  }
+}
+
+/* ===== ТАРИФЫ ===== */
+.tariffs-intro { text-align: center; padding: 20px 0; }
+.tariffs-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: var(--color-text-dark);
+}
+.tariffs-description {
+  font-size: 1.1em;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+}
+.button-wrapper { margin-top: 20px; }
+.tariffs-cta {
+  background: #c3e6b1;
+  color: #fff !important;
+  font-weight: bold;
+  padding: 12px 25px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 1em;
+  display: inline-block;
+  transition: background 0.3s ease;
+}
+.tariffs-cta:hover { background: #aed999; color: #fff !important; }
+.tariff-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+.tariff.card {
+  width: 260px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  border-radius: 18px;
+  padding: 20px;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tariff.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 0 20px rgba(0,255,210,0.25);
+}
+.img-block.img-small img { width: 200px; height: 200px; object-fit: contain; }
+
+/* ===== ПАРТНЕРЫ ===== */
+.partners {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  background: #fff;
+  padding: 20px 0;
+  border-radius: 12px;
+}
+
+.partners-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: var(--color-text-dark);
+}
+.partners img { height: 125px; object-fit: contain; transition: transform .3s ease; }
+.partners img:hover { transform: scale(1.1); }
+
+/* ===== FAQ ===== */
+.faq-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: var(--color-text-dark);
+}
+#faq { padding: 30px 0; }
+#faq h2 { font-size: 2rem; text-align: center; color: var(--color-text-dark); margin-bottom: 20px; }
+.faq-item details {
+  background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.faq-item details[open] { background-color: #f5f5f5; }
+.faq-item summary { font-size: 1.1rem; font-weight: 600; color: var(--color-text-dark); display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.faq-item summary::marker { content: "+"; font-size: 1.5rem; margin-left: 10px; transition: transform 0.3s ease; }
+.faq-item details[open] summary::marker { transform: rotate(45deg); }
+.faq-item p { margin-top: 10px; color: var(--muted); font-size: 1rem; line-height: 1.5; }
+
+/* ===== CONTACT ===== */
+.contact-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: var(--color-text-dark);
+}
+
+#contact { padding: 40px 0; text-align: center; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+#contact h2 { font-size: 2rem; color: var(--color-text-dark); margin-bottom: 15px; }
+#contact p { font-size: 1.2rem; color: var(--muted); margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
+#contact .btn {
+  display: inline-block;
+  background-color: #0077b5;
+  color: white;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+#contact .btn:hover { background-color: #005f87; transform: translateY(-2px); }
+
+/* ===== FOOTER ===== */
+.site-footer { background-color: #f5f5f5; padding: 40px 0; color: var(--muted); font-size: 1rem; text-align: center; }
+.footer-content { display: flex; justify-content: space-between; align-items: center; max-width: var(--max-width); margin: 0 auto; }
+.footer-left { display: flex; align-items: center; }
+.footer-nav { display: flex; gap: 20px; }
+.footer-nav a { text-decoration: none; color: var(--muted); font-size: 1rem; }
+.footer-nav a:hover { color: var(--accent); }
+.footer-right { display: flex; justify-content: flex-end; }
+.offer-link { text-decoration: none; color: var(--accent); font-size: 1rem; }
+.offer-link:hover { text-decoration: underline; }
+.all-rights { margin-top: 20px; font-size: 0.9rem; color: var(--muted); text-align: center; }
+
+/* ===== DARK MODE ===== */
+body.dark-mode {
+  background: #0b0d10 !important;
+  color: #e7e7e7 !important;
+}
+body.dark-mode .card,
+body.dark-mode .tariff.card,
+body.dark-mode .faq-item details,
+body.dark-mode #contact { background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); color: #e7e7e7; }
+body.dark-mode p, body.dark-mode li, body.dark-mode a { color: #cfd3d8 !important; }
+body.dark-mode .cta, body.dark-mode .tariffs-cta { background: #00c2a8 !important; color: #fff !important; }
+body.dark-mode .hero-title { color: #fff !important; }
+body.dark-mode .tariffs-title { color: #fff !important; }
+body.dark-mode .partners-title { color: #fff !important; }
+body.dark-mode .contact-title { color: #fff !important; }
+body.dark-mode .faq-title { color: #fff !important; }
+body.dark-mode .faq-item { color: #fff !important; }
+body.dark-mode .tariff.card p, body.dark-mode .tariff.card h4 { color: #fff !important; }
+body.dark-mode .partners { background: #fff !important; }
+body.dark-mode .site-footer { background-color: #0f1114 !important; color: #d6d6d6 !important; }
+body.dark-mode .footer-nav a { color: #d6d6d6 !important; }
+body.dark-mode .footer-nav a:hover { color: #00c2a8 !important; }
+body.dark-mode .all-rights { color: #bfbfbf !important; }
+body.dark-mode .offer-link { color: #00c2a8 !important; }
+
+/* ===== МЕДИА ===== */
+@media (max-width: 768px) {
+  .interface-flex, .spread-flex { flex-direction: column !important; align-items: center !important; text-align: left; }
+  .exch img, .spread-img img { width: 100% !important; max-width: 500px; height: auto; margin-bottom: 20px; }
+  .interface-grid, .spread-list { width: 100%; padding-left: 0; }
+  .tariffs-title { font-size: 2.5rem; }
+  .tariffs-description { font-size: 1em; padding: 0 15px; }
+  .section-divider { margin: 30px auto; }
+  #faq h2 { font-size: 1.5rem; }
+  .faq-item details { padding: 12px; }
+  .faq-item summary { font-size: 1rem; }
+  .faq-item p { font-size: 0.9rem; }
+  #contact h2 { font-size: 1.7rem; }
+  #contact p { font-size: 1rem; }
+  #contact .btn { font-size: 1rem; padding: 10px 25px; }
+  .partners img { height: 30px; }
+  .topnav, .cta { display: none !important; }
+  .mobile-menu-btn { display: block; }
+}
+@media (max-width: 480px) {
+  .tariffs-title { font-size: 2rem; }
+  .tariffs-cta { padding: 10px 20px; font-size: 0.9em; }
+  .partners img { height: 25px; }
+  .tariff.card { width: 100%; max-width: 330px; }
+}
+
+/* ===============================
+   1) Исправляем Dark Mode Toggle
+=============================== */
+.dark-mode-toggle {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 9999;
+  background: #fff;
+  color: #111;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  transition: 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  transform: translateY(-3px);
+}
+
+
+/* ===============================
+   2) Мобильное меню скрыть на ПК
+=============================== */
+@media (min-width: 769px) {
+  .mobile-menu,
+  .mobile-menu-btn {
+    display: none !important;
+  }
+}
+
+/* ===============================
+   3) Заголовок партнеров — по центру
+=============================== */
+.partners-title,
+#partners h2,
+.partners h2 {
+  text-align: center !important;
+  width: 100% !important;
+  font-size: 2rem !important; /* подгоняем под остальные секции */
+  margin: 0 auto 20px auto !important;
+}
+
+/* ===============================
+   4) Центрируем кнопки навигации футера
+=============================== */
+.footer-content {
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center;
+}
+
+.footer-nav {
+  justify-content: center !important;
+  margin: 10px 0 !important;
+}
+
+.footer-left,
+.footer-right {
+  display: flex !important;
+  justify-content: center !important;
+  margin-bottom: 10px !important;
+}
+
+
+/* ================== Общие стили модалок ================== */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none; /* запрещаем клики по скрытой модалке */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 9999;
+}
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.modal-wrapper {
+  position: relative;
+  background-color: #fff;
+  max-width: 500px;
+  width: 90%;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  text-align: center;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+}
+
+.modal.active .modal-wrapper {
+  transform: translateY(0);
+}
+
+/* Крестик закрытия */
+.modal-wrapper .close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #111;
+  transition: color 0.3s ease;
+}
+
+.modal-wrapper .close:hover {
+  color: var(--accent, #00c2a8);
+}
+
+/* Кнопки открытия других модалок */
+.modal-wrapper button.open-modal {
+  background: var(--accent, #00c2a8);
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  font-size: 14px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.modal-wrapper button.open-modal:hover {
+  background: #007568;
+  transform: translateY(-2px);
+}
+
+/* ================== Dark Mode ================== */
+body.dark-mode .modal-wrapper {
+  background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  color: #e7e7e7;
+}
+
+body.dark-mode .modal-wrapper .close {
+  color: #fff;
+}
+
+body.dark-mode .modal-wrapper button.open-modal {
+  background: #00c2a8;
+  color: #fff;
+}
+
+/* Скрываем мобильное меню по умолчанию */
+#mobile-menu {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: -100%; /* Меню за экраном */
+  width: 80%;
+  max-width: 300px;
+  height: 100vh;
+  background: #fff;
+  padding: 50px 20px;
+  box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+  transition: right 0.3s ease;
+  z-index: 1000;
+}
+
+/* Когда меню открыто */
+#mobile-menu.active {
+  right: 0;
+}
+
+/* Стили ссылок внутри меню */
+#mobile-menu a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 12px 0;
+  color: #111;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+#mobile-menu a:hover {
+  color: #007568;
+}
+
+/* Кнопка-бургер */
+#mobile-menu-btn {
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #111;
+  z-index: 1100;
+  transition: color 0.2s;
+}
+
+#mobile-menu-btn:hover {
+  color: #007568;
+}
+
+/* Темный фон при открытии меню */
+#mobile-menu-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  z-index: 900;
+}
+
+#mobile-menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Скрываем топнав на мобильных */
+@media (max-width: 768px) {
+  .topnav {
+    display: none;
+  }
+  #mobile-menu-btn {
+    display: block;
+  }
+}
+
+
+
+

@@ -1,0 +1,695 @@
+{
+  "name": "GATE CHAINS",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://api.gateio.ws/api/v4/spot/tickers",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -224,
+        -16
+      ],
+      "id": "33eddf10-f9c1-4b47-ba87-358c3b9d35d5",
+      "name": "GATE"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "allCoins",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        320,
+        -16
+      ],
+      "id": "2eaa54c1-df46-4f71-9771-53f681a4fa79",
+      "name": "Split Out8"
+    },
+    {
+      "parameters": {
+        "jsCode": "const uniqueSymbols = new Set();\n\nfor (const item of items) {\n  if (item.json && item.json.currency_pair) {\n    let symbol = item.json.currency_pair;\n    // Удаляем из символа пары USDT, USDC, BTC и т.д.\n    symbol = symbol.replace(/USDT|USDC|BTC|BUSD|ETH|BNB|EUR|USD|DAI|PLN|TRY|TUSD/i, '');\n    uniqueSymbols.add(symbol);\n  }\n}\n\n// Конвертируем Set в массив объектов\nconst finalSymbols = [...uniqueSymbols].map(symbol => ({ coin_name: symbol }));\n\nreturn [{ json: { allCoins: finalSymbols } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        144,
+        -16
+      ],
+      "id": "64598d25-2aa1-4ecb-96b5-cd50ef42624f",
+      "name": "NAKED COINS2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1072,
+        -16
+      ],
+      "id": "a7ac3ee3-1ef6-4dff-a54a-ca238ab57dd2",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "url": "https://api.gateio.ws/api/v4/spot/time",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        832,
+        96
+      ],
+      "id": "0fdbc1ce-2d8c-4dd0-8962-ca74f5c2d002",
+      "name": "Get GATE Server Time1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Код для преобразования currency_pair\nfor (const item of items) {\n  const currencyPair = item.json.currency_pair;\n\n  if (currencyPair) {\n    // Убираем символ подчеркивания\n    const newCurrencyPair = currencyPair.replace('_', '');\n    \n    // Обновляем значение в элементе\n    item.json.currency_pair = newCurrencyPair;\n  }\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -16
+      ],
+      "id": "27ef10b8-a157-4b10-a8de-610302e42c4d",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        544,
+        -16
+      ],
+      "id": "0d6ba146-2bc1-411c-9b3f-d7f03c4c3275",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const mergedItems = [];\nconst coinItems = [];\nlet latestServerTime = null;\n\n// 1. Разделяем входящие данные на два типа: монеты и время\nfor (const item of items) {\n  if (item.json && item.json.coin_name) {\n    coinItems.push(item.json);\n  } else if (item.json && item.json.server_time) {\n    // Находим самое свежее время\n    if (!latestServerTime || item.json.server_time > latestServerTime) {\n      latestServerTime = item.json.server_time;\n    }\n  }\n}\n\n// 2. Если у нас есть и монеты, и время, объединяем их\nif (coinItems.length > 0 && latestServerTime !== null) {\n  for (const coin of coinItems) {\n    const mergedItem = {\n      ...coin,\n      server_time: latestServerTime\n    };\n    mergedItems.push({ json: mergedItem });\n  }\n}\n\nreturn mergedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        -16
+      ],
+      "id": "0f0ecec3-af01-4129-8e37-159d9d32fdf6",
+      "name": "JOIN2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const recvWindow = 60;\n\nfor (const item of items) {\n  const serverTime = $input.first().json.server_time;\n  const coinSymbol = $input.first().json.coin_name;\n  const apiKey = '056f8de44c3f7f6c0195cda9f59d210a';\n\n  const urlPath = '/api/v4/spot/currencies/' + coinSymbol;\n  const method = 'GET';\n  \n  // Убедитесь, что sign_payload - это одна строка\n  const signPayload = `timestamp:${serverTime}\\nmethod:${method}\\nurl:${urlPath}\\nbody:\\n`;\n  \n  item.json.sign_payload = signPayload.replace(/\\n/g, \"\\\\n\");\n\n  item.json.serverTime = serverTime;\n  item.json.apiKey = apiKey;\n  item.json.gateUrl = `https://api.gateio.ws${urlPath}`;\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        112
+      ],
+      "id": "4a7a2be3-57c8-49f2-a369-07704abe2b1c",
+      "name": "GATE AUTH"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gatesign.{your_nick}.workers.dev/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"stringToSign\": \"{{ $json.sign_payload }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1664,
+        0
+      ],
+      "id": "44923b23-7632-4ded-8aa9-c18edb5fb3a0",
+      "name": "Cloudflare Sign"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1840,
+        112
+      ],
+      "id": "33b7c64c-5fdd-4e1f-8204-fd6686fe5acf",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Этот код предполагает, что на вход подается массив из двух элементов:\n// Первый элемент - результат запроса к Cloudflare Worker\n// Второй элемент - результат запроса к Bybit\n// Важно убедиться, что узлы в вашем рабочем процессе подключены в правильном порядке.\n\nconst signatureData = items[0].json; // Данные с подписью\nconst bybitData = items[1].json; // Данные от Bybit\n\n// Объединяем два объекта в один, используя деструктуризацию\nconst mergedObject = {\n  ...signatureData,\n  ...bybitData\n};\n\n// Возвращаем объединенный объект в виде одного элемента массива\nreturn [{ json: mergedObject }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        112
+      ],
+      "id": "c80117b8-f30c-472e-a3c2-4f564e2d368c",
+      "name": "JOIN3"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.gateUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "KEY",
+              "value": "={{ $json.apiKey }}"
+            },
+            {
+              "name": "SIGN",
+              "value": "={{ $json.signature }}"
+            },
+            {
+              "name": "Timestamp",
+              "value": "={{ $json.serverTime / 1000 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2288,
+        112
+      ],
+      "id": "93bef68f-142a-49fc-8593-351f0f5643ae",
+      "name": "GATE  CHAINS",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 0.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3200,
+        112
+      ],
+      "id": "3af75320-ac99-44a9-848c-12d425bfbfee",
+      "name": "Wait1",
+      "webhookId": "bc90d080-89a3-48bc-b018-aaefa170dc1d"
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\n\n// Обрабатываем каждый элемент, который пришел с предыдущего узла\nfor (const item of items) {\n  const currencyInfo = item.json;\n\n  // Убедимся, что у нас есть данные и массив сетей\n  if (currencyInfo && currencyInfo.chains && currencyInfo.chains.length > 0) {\n    // Проходим по каждой сети в массиве\n    for (const network of currencyInfo.chains) {\n      // Создаем объект с нужными полями\n      processedItems.push({\n        json: {\n          coin_name: currencyInfo.currency,\n          chain: network.name,\n          exchange: 'Gate.io'\n        }\n      });\n    }\n  }\n}\n\nreturn processedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2800,
+        0
+      ],
+      "id": "bafa4431-99cc-4a14-a2c9-8ff48f3269b8",
+      "name": "RAW REC2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "coin_data",
+          "mode": "list",
+          "cachedResultName": "coin_data"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "coin_name": "={{ $json.coin_name }}",
+            "exchange": "={{ $json.exchange }}",
+            "chain": "={{ $json.chain }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "coin_name",
+              "displayName": "coin_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chain_type",
+              "displayName": "chain_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "withdraw_fee",
+              "displayName": "withdraw_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "deposit_min",
+              "displayName": "deposit_min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "withdraw_min",
+              "displayName": "withdraw_min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "confirmation",
+              "displayName": "confirmation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "chain",
+              "displayName": "chain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exchange",
+              "displayName": "exchange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_updated",
+              "displayName": "last_updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2960,
+        0
+      ],
+      "id": "c5789370-8138-4154-9985-09791f35975f",
+      "name": "Insert rows in a table2",
+      "credentials": {
+        "postgres": {
+          "id": "YcdBo4B5ZTP1Pm1o",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 4,
+              "triggerAtMinute": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -384,
+        -16
+      ],
+      "id": "b5588f62-a35f-4929-8db4-f4b098639175",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bd45fe88-dde9-47a3-adfa-48ed77df6a4b",
+              "leftValue": "={{ $json.delisted }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "ec7e57c2-255d-4076-b9ed-36e3f72790e9",
+              "leftValue": "={{ $json.withdraw_disabled }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "72c84a5b-9926-4f52-b866-6e35a6ed083e",
+              "leftValue": "={{ $json.withdraw_delayed }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "46017946-e2f9-4a61-95bc-e912fad6e11e",
+              "leftValue": "={{ $json.deposit_disabled }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "66c654ed-e1ae-454d-8497-22f26e7e1766",
+              "leftValue": "={{ $json.trade_disabled }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2496,
+        112
+      ],
+      "id": "bf72b061-8993-48b6-a02d-9459b0f3221b",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "GATE": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out8": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NAKED COINS2": {
+      "main": [
+        [
+          {
+            "node": "Split Out8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "JOIN2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get GATE Server Time1": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "NAKED COINS2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get GATE Server Time1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JOIN2": {
+      "main": [
+        [
+          {
+            "node": "GATE AUTH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GATE AUTH": {
+      "main": [
+        [
+          {
+            "node": "Cloudflare Sign",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Cloudflare Sign": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "JOIN3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JOIN3": {
+      "main": [
+        [
+          {
+            "node": "GATE  CHAINS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GATE  CHAINS": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAW REC2": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert rows in a table2": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "GATE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "RAW REC2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6ee31e01-7df4-4a0f-acae-f956910bc131",
+  "meta": {
+    "instanceId": "e1a1371ab2cebed24df7bca38a441b1168715f3e1404bae350db77119eb77081"
+  },
+  "id": "fUqwKxPMIYZbFdUC",
+  "tags": []
+}

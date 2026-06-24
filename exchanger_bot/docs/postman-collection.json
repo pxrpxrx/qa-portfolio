@@ -1,0 +1,72 @@
+
+{
+  "info": {
+    "name": "BestChange API — Криптообменник",
+    "description": "Коллекция для тестирования BestChange API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://bestchange.app/v2"
+    },
+    {
+      "key": "api_key",
+      "value": "YOUR_API_KEY"
+    }
+  ],
+  "item": [
+    {
+      "name": "BTC → RUB",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/{{api_key}}/rates/93-105",
+          "protocol": "https",
+          "host": ["bestchange", "app"],
+          "path": ["v2", "{{api_key}}", "rates", "93-105"]
+        }
+      }
+    },
+    {
+      "name": "BTC → USDT",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/{{api_key}}/rates/93-10",
+          "protocol": "https",
+          "host": ["bestchange", "app"],
+          "path": ["v2", "{{api_key}}", "rates", "93-10"]
+        }
+      }
+    },
+    {
+      "name": "USDT → RUB",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/{{api_key}}/rates/10-105",
+          "protocol": "https",
+          "host": ["bestchange", "app"],
+          "path": ["v2", "{{api_key}}", "rates", "10-105"]
+        }
+      }
+    },
+    {
+      "name": "Неверный API-ключ (ошибка)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/INVALID_KEY/rates/93-105",
+          "protocol": "https",
+          "host": ["bestchange", "app"],
+          "path": ["v2", "INVALID_KEY", "rates", "93-105"]
+        }
+      }
+    }
+  ]
+}

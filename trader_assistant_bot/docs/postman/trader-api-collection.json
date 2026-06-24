@@ -1,0 +1,64 @@
+{
+  "info": {
+    "name": "Trader Assistant Bot API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Monitor Status",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/monitor/status"
+      }
+    },
+    {
+      "name": "Start Trail Monitoring",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/monitor/start",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"symbol\": \"BTCUSDT\", \"trail_pct\": 2.0}"
+        }
+      }
+    },
+    {
+      "name": "Stop Trail Monitoring",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/monitor/stop/{{symbol}}"
+      }
+    },
+    {
+      "name": "Get Active Trails",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/monitor/trails"
+      }
+    },
+    {
+      "name": "Get Performance Stats",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/monitor/stats"
+      }
+    },
+    {
+      "name": "Simulate Fractal Signal",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/simulate/signal",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"symbol\": \"BTCUSDT\", \"direction\": \"LONG\", \"price\": 65000, \"timeframe\": \"1h\"}"
+        }
+      }
+    }
+  ],
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:8080"},
+    {"key": "symbol", "value": "BTCUSDT"}
+  ]
+}

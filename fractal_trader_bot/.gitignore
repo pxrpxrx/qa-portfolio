@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+venv/
+.env/
+.venv/
+
+# IDE / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Configuration with secrets
+src/utilities/config/config.json
+!src/utilities/config/config.json.template
+
+# Database
+*.db
+*.sqlite
+daily_stats.json
+
+# Logs
+*.log
+trading_simulator.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# pytest
+.pytest_cache/
+
+# Temp files
+tmp/
+temp/

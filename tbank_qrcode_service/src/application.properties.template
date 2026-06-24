@@ -1,0 +1,26 @@
+# =============================================
+# Tinkoff SBP Payment Service - Configuration
+# =============================================
+# Copy this file to src/main/resources/application.properties
+# and fill in your actual values. NEVER commit secrets to git.
+# =============================================
+
+# Tinkoff API
+tinkoff.api.url=https://securepay.tinkoff.ru/v2/
+tinkoff.terminal.key=<your-terminal-key>
+tinkoff.secret.key=<your-secret-key>
+tinkoff.notification.url=https://your-domain.com/tinkoff/notify
+
+# PostgreSQL
+spring.datasource.url=jdbc:postgresql://localhost:5433/payments_db
+spring.datasource.username=payments
+spring.datasource.password=<your-db-password>
+
+# Redis
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+
+# JPA
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect

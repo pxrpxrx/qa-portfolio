@@ -1,0 +1,21 @@
+{
+  "max_positions": 25,
+  "max_position_size_abs": 25,
+  "min_position_size": 5.0,
+  "daily_loss_limit_abs": 10,
+  "max_drawdown_percent": 15.0,
+  "blacklist": [],
+  "whitelist": [],
+  "trading_hours": {
+    "start": 0,
+    "end": 24
+  },
+  "weekend_trading": true,
+  "min_volume_24h": 1000000,
+  "min_price": 1e-06,
+  "emergency_stop": false,
+  "min_atr_percent": 0.255,
+  "min_rr": 2.5,
+  "min_profit_usdt": 0.5,
+  "max_risk_usdt": 2.5
+}

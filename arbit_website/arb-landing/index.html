@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ARB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- Dark mode toggle -->
+<div class="dark-mode-toggle" onclick="document.body.classList.toggle('dark-mode')">
+  🌙 Dark mode
+</div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="logo">
+      <img src="assets/A.png" alt="A" />
+    </div>
+    <nav class="topnav">
+      <a href="#features">Функции</a>
+      <a href="#pricing">Тарифы</a>
+      <a href="#partners">Партнёры</a>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#features">Функции</a>
+      <a href="#pricing">Тарифы</a>
+      <a href="#partners">Партнеры</a>
+      <a href="#contact">Телеграм бот</a>
+    </div>
+
+    <a class="cta" href="https://t.me/arbit_but_bot" target="_blank">Телеграм бот</a>
+    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-inner">
+      <h1 class="hero-title">Есть всегда.</h1>
+      <div class="hero-media">
+        <img src="assets/1.png" alt="Hero" />
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="container section">
+    <h2>Что может наш бот:</h2>
+    <p class="muted">Здесь кратко описаны функции бота и его настройки</p>
+    <div class="grid cards">
+      <article class="card">
+        <h3>💼</h3>
+        <h3>Биржи</h3>
+        <p>Выбирайте биржи, с которыми удобно работать и подключайтесь по реферальным ссылкам</p>
+      </article>
+      <article class="card">
+        <h3>📈</h3>
+        <h3>Спред</h3>
+        <p>Решайте сами, какой спред вы желаете видеть, не распыляйтесь по мелочам</p>
+      </article>
+      <article class="card">
+        <h3>💲</h3>
+        <h3>Профит</h3>
+        <p>Время - деньги. Только вы определяете минимальную прибыль</p>
+      </article>
+      <article class="card">
+        <h3>💎</h3>
+        <h3>Объём</h3>
+        <p>Система рассчитывает объем по вашим параметрам на основе данных биржевого стакана</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="interface" class="container section">
+    <div class="interface-flex">
+      <div class="exch">
+        <img src="assets/exch.jpg" alt="exch">
+      </div>
+      <div>
+        <h3 class="interface-title">Как выглядит функционал:</h3>
+        <ol class="interface-grid">
+          <li>Настраивайте фильтр по биржам: решайте сами, где вам удобнее покупать и где продавать</li>
+          <li>На данный момент мы сотрудничаем с 5 основными биржами</li>
+          <li>Для каждого из наших партнеров есть актуальные реферальные ссылки, при регистрации по которым вы получаете скидку на торговые комиссии или торговый бонус</li>
+          <li>Список бирж постоянно расширяется, соответственно возможностей всё больше</li>
+          <li>Рекомендуем выбрать для себя 1-2 биржи для покупки на первых этапах, чтобы иметь возможность покупать сразу и не переводить депозит на биржу, где появился сигнал</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="spread-screen" class="container section">
+    <div class="spread-flex">
+      <div class="spread-list-wrap">
+        <p class="interface-title">
+          Таким образом выглядит сигнал в торговом боте. Вы указываете свои параметры в меню, а система на основе ваших предпочтений подбирает вам актуальные спреды и делает расчеты
+        </p>
+        <ol class="spread-list">
+          <li>Спреды выставляются самостоятельно. Для более частых сигналов рекомендуем выставлять значение 1-2%. Спреды выше 10% считаются более рискованными</li>
+          <li>Прибыль рассчитывается за вычетом комиссий за вывод + ввод в USDT, торговых комиссий из доступного объема</li>
+          <li>Объем рассчитывается автоматически на основании данных анализа биржевого стакана, равномерности его распределения</li>
+          <li>Подтверждения определяют среднее время вывода монеты и скорость обработки информации блокчейном. Чем выше значение - тем дольше будет вывод.</li>
+        </ol>
+      </div>
+      <div class="spread-img">
+        <img src="assets/spread.jpg" alt="spread">
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <hr class="section-divider"> 
+    <section id="pricing" class="tariffs-intro section">
+      <h2 class="tariffs-title">Тарифы</h2>
+      <p class="tariffs-description">
+        Выбирайте тарифы под свои нужды и бюджет. Система тарификации разработана максимально
+        гибко специально для вас.
+      </p>
+      <div class="button-wrapper">
+        <a href="https://t.me/arbit_pay_bot" class="cta tariffs-cta">Выбрать тариф</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="tariff-wrapper">
+    <div class="tariff card">
+      <div class="img-block img-small">
+        <img src="assets/btc1.png" alt="BTC">
+      </div>
+      <h4>1 день</h4>
+      <p>Стоимость: 2 500 ₽</p>
+    </div>
+    <div class="tariff card">
+      <div class="img-block img-small">
+        <img src="assets/eth1.png" alt="ETH">
+      </div>
+      <h4>7 дней</h4>
+      <p>Стоимость: 12 500 ₽</p>
+    </div>
+    <div class="tariff card">
+      <div class="img-block img-small">
+        <img src="assets/xrp1.png" alt="XRP">
+      </div>
+      <h4>30 дней</h4>
+      <p>Стоимость: 30 000 ₽</p>
+    </div>
+  </div>
+
+  <section id="partners" class="container section">
+    <h2 class="partners-title">Наши партнеры</h2>
+    <div class="partners reveal">
+      <img src="assets/bybit.png" alt="BYBIT">
+      <img src="assets/bingx.png" alt="BingX">
+      <img src="assets/mexc.png" alt="MEXC">
+      <img src="assets/htx.png" alt="HTX">
+      <img src="assets/gateio.png" alt="Gate.io">
+    </div>
+  </section>
+
+  <section id="faq" class="container section">
+    <h2 class="faq-title">Вопросы и ответы</h2>
+    <div class="faq-item">
+      <details>
+        <summary>Вопрос 1: Как часто появляются спреды? Как долго держатся?</summary>
+        <p>Ответ: Спреды есть всегда. Часто держатся 10-20 минут.</p>
+      </details>
+    </div>
+    <div class="faq-item">
+      <details>
+        <summary>Вопрос 2: Как оплачивать тарифы?</summary>
+        <p>Ответ: Оплата производится через платежную систему внутри Telegram.</p>
+      </details>
+    </div>
+    <div class="faq-item">
+      <details>
+        <summary>Вопрос 3: С какой суммы можно начать торговать?</summary>
+        <p>Ответ: Начать тренироваться можно с любой суммы. Желательно иметь депозит от 300 USDT.</p>
+      </details>
+    </div>
+    <div class="faq-item">
+      <details>
+        <summary>Вопрос 4: Какая в среднем прибыль?</summary>
+        <p>Ответ: Во всех видах арбитража прибыль зависит от рынка, навыков и времени работы. В среднем за день на межбиржевом арбитраже можно заработать 1-5%.</p>
+      </details>
+    </div>
+  </section>
+
+  <section id="contact" class="container section">
+    <h2 class="contact-title">Связаться с нами</h2>
+    <p>Переходите в телеграм-канал для связи и поддержки.</p>
+    <a class="btn" href="https://t.me/arb_official_news" target="_blank">Перейти в Telegram</a>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-content">
+    <div class="footer-left">
+      <nav class="footer-nav">
+        <a href="#features">Функционал</a>
+        <a href="#pricing">Тарифы</a>
+        <a href="#partners">Партнеры</a>
+      </nav>
+    </div>
+    <div class="footer-right">
+      <!-- оферта удалена -->
+    </div>
+  </div>
+
+<button class="open-modal" data-target="offer-modal">Публичная оферта</button>
+
+  <div class="all-rights">
+    <small>© ARB 2025 Все права защищены</small>
+  </div>
+
+</footer>
+
+<!-- ================== Стартовая модалка ================== -->
+<div id="start-modal" class="modal active">
+  <div class="modal-wrapper">
+    <span class="close" id="close-start">&times;</span>
+    <h3>Добро пожаловать!</h3>
+    <p>ВНИМАНИЕ</p>
+    <p>Данный сервис предоставляет только аналитическую информацию и не является инвестиционной рекомендацией. Все решения принимаются пользователем на свой риск.</p>
+    <button class="open-modal" data-target="consent-modal">Согласие на обработку персональных данных</button>
+  </div>
+</div>
+
+<!-- ================== Модалка Публичной оферты ================== -->
+<div id="offer-modal" class="modal">
+  <div class="modal-wrapper modal-scroll">
+    <span class="close">&times;</span>
+    <h3>Публичная оферта</h3>
+
+    <div class="offer-content">
+      <p><strong>Исполнитель:</strong> Индивидуальный предприниматель XXX</p>
+      <p><strong>Юридический адрес:</strong> XXX</p>
+      <p><strong>ИНН:</strong> XXX</p>
+      <p><strong>ОГРНИП:</strong> XXX</p>
+
+      <h4>1. Общие положения</h4>
+      <p>1.1. Настоящая публичная оферта является официальным предложением Исполнителя и адресована дееспособным физическим или юридическим лицам.</p>
+      <p>1.2. Акцепт оферты считается произведённым после оплаты тарифа или услуги Пользователем любым доступным способом, включая QR-код.</p>
+      <p>1.3. С момента акцепта Пользователь считается заключившим договор возмездного оказания услуг на условиях оферты.</p>
+
+      <h4>2. Термины и определения</h4>
+      <ul>
+        <li><strong>Сервис ARB</strong> — онлайн-система, предоставляющая доступ к аналитической информации, торговым сигналам и образовательным материалам.</li>
+        <li><strong>Услуга</strong> — доступ к функционалу сервиса ARB на выбранный период.</li>
+        <li><strong>Подписка / Тариф</strong> — оплачиваемый доступ на определённое количество дней.</li>
+        <li><strong>Сигнал / Образовательный материал</strong> — отдельная платная услуга.</li>
+        <li><strong>Пользователь</strong> — лицо, оплатившее тариф или сигнал.</li>
+        <li><strong>Telegram ID</strong> — уникальный идентификатор Пользователя.</li>
+      </ul>
+
+      <h4>3. Предмет договора</h4>
+      <p>3.1. Исполнитель предоставляет доступ к сервису ARB на условиях выбранного тарифа или услуги.</p>
+      <p>3.2. Услуга включает доступ к аналитике, сигналам, образовательным материалам, внутреннему балансу и Telegram-боту.</p>
+      <p>3.3. Сервис носит информационно-аналитический и образовательный характер и не является инвестиционным или финансовым посредником.</p>
+
+      <h4>4. Тарифы и платежи</h4>
+      <p>4.1. Пользователь может пополнять баланс любой суммой через QR-код.</p>
+      <p>4.2. Средства используются для оплаты подписки, сигналов и образовательных материалов.</p>
+      <p>4.3. В случае задержки платежа Пользователь обязан предоставить доказательства через поддержку бота.</p>
+      <p>4.4. Возврат средств не осуществляется.</p>
+
+      <h4>5. Обязательства сторон</h4>
+      <p><strong>Исполнитель:</strong> обеспечивает доступ к сервису, публикует уведомления о техработах, переносит доступ при сбоях.</p>
+      <p><strong>Пользователь:</strong> использует сервис только для личных целей, не обходя ограничения, сохраняет данные доступа.</p>
+
+      <h4>6. Форс-мажор</h4>
+      <p>Стороны освобождаются от ответственности за непредвиденные обстоятельства: стихийные бедствия, перебои в работе банков, сбои Telegram, действия госорганов.</p>
+
+      <h4>7. Ответственность сторон</h4>
+      <p>Исполнитель не несет ответственности за финансовые результаты Пользователя, решения на основе сигналов, работу сторонних сервисов и Telegram.</p>
+
+      <h4>8. Персональные данные</h4>
+      <p>Исполнитель обрабатывает Telegram ID, Ф.И.О., данные об оплатах. Обработка согласно ФЗ №152. Передача третьим лицам не осуществляется.</p>
+
+      <h4>9. Срок действия и изменения оферты</h4>
+      <p>Оферта действует бессрочно. Исполнитель может изменять условия в одностороннем порядке. Актуальная версия размещается на сайте или в Telegram-боте.</p>
+
+      <h4>10. Подтверждение акцепта</h4>
+      <p>Оплачивая услуги, Пользователь подтверждает согласие с условиями оферты, понимание характера услуг и невозвратность средств, согласие на обработку персональных данных.</p>
+    </div>
+
+    <button id="accept-offer" class="btn">Принять оферту</button>
+  </div>
+</div>
+
+<style>
+/* Общий стиль модалки */
+.modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex; justify-content: center; align-items: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 9999;
+}
+.modal.active {
+  opacity: 1; visibility: visible;
+}
+.modal-wrapper {
+  background-color: #fff;
+  padding: 25px 20px;
+  border-radius: 12px;
+  max-width: 700px; width: 90%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  position: relative;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.modal-scroll {
+  overflow-y: auto;
+}
+.modal-wrapper .close {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 24px; cursor: pointer;
+  color: #111;
+}
+.modal-wrapper .close:hover { color: #007568; }
+.offer-content { text-align: left; margin-bottom: 20px; }
+.offer-content h4 { margin-top: 15px; }
+#accept-offer {
+  background: #007568;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+#accept-offer:hover { background: #00997d; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const offerModal = document.getElementById("offer-modal");
+
+  // Закрытие по крестику
+  offerModal.querySelector(".close").addEventListener("click", () => {
+    offerModal.classList.remove("active");
+  });
+
+  // Принятие оферты
+  document.getElementById("accept-offer").addEventListener("click", () => {
+    // Здесь можно добавить фиксацию акцепта, например отправку в БД
+    alert("Оферта принята. Совершите оплату услуг для завершения акцепта.");
+    offerModal.classList.remove("active");
+  });
+
+  // Закрытие при клике на фон
+  offerModal.addEventListener("click", (e) => {
+    if(e.target === offerModal) offerModal.classList.remove("active");
+  });
+});
+</script>
+
+
+<!-- ================== Модалка Согласия на обработку данных ================== -->
+<div id="consent-modal" class="modal">
+  <div class="modal-wrapper modal-scroll">
+    <span class="close">&times;</span>
+    <h3>Согласие на обработку персональных данных</h3>
+
+    <div class="consent-content">
+      <p>Настоящим Пользователь выражает согласие на обработку своих персональных данных Исполнителем.</p>
+
+      <h4>1. Состав персональных данных</h4>
+      <p>Исполнитель обрабатывает следующие данные Пользователя:</p>
+      <ul>
+        <li>Telegram ID</li>
+        <li>Ф.И.О., если указано при оплате</li>
+        <li>Данные об оплаченных тарифах, сигналах и образовательных материалах</li>
+        <li>История использования сервиса и взаимодействия с Telegram-ботом</li>
+      </ul>
+
+      <h4>2. Цели обработки</h4>
+      <p>Данные используются исключительно для:</p>
+      <ul>
+        <li>идентификации доступа к сервису</li>
+        <li>ведение статистики использования</li>
+        <li>исполнения обязательств по договору оказания услуг</li>
+        <li>связи с Пользователем через Telegram и e-mail</li>
+      </ul>
+
+      <h4>3. Порядок и методы обработки</h4>
+      <p>Обработка осуществляется в соответствии с Федеральным законом №152-ФЗ «О персональных данных» и включает сбор, хранение, изменение, использование и уничтожение данных.</p>
+
+      <h4>4. Передача данных третьим лицам</h4>
+      <p>Передача персональных данных третьим лицам не осуществляется, за исключением случаев, предусмотренных законодательством РФ.</p>
+
+      <h4>5. Срок действия согласия</h4>
+      <p>Согласие действует бессрочно до его отзыва Пользователем в письменной форме или через поддержку Telegram-бота.</p>
+
+      <h4>6. Права и обязанности Пользователя</h4>
+      <ul>
+        <li>Пользователь вправе запросить информацию о своих персональных данных и их обработке.</li>
+        <li>Пользователь обязан предоставлять достоверные данные при регистрации и оплате услуг.</li>
+      </ul>
+
+      <h4>7. Подтверждение согласия</h4>
+      <p>Нажатием кнопки «Принять согласие» Вы подтверждаете ознакомление с условиями обработки персональных данных и согласие на их обработку в рамках предоставляемого сервиса.</p>
+    </div>
+
+    <button id="accept-consent" class="btn">Принять согласие</button>
+  </div>
+</div>
+
+<style>
+/* Общий стиль совпадает с модалкой оферты */
+.modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex; justify-content: center; align-items: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 9999;
+}
+.modal.active {
+  opacity: 1; visibility: visible;
+}
+.modal-wrapper {
+  background-color: #fff;
+  padding: 25px 20px;
+  border-radius: 12px;
+  max-width: 700px; width: 90%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  position: relative;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.modal-scroll {
+  overflow-y: auto;
+}
+.modal-wrapper .close {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 24px; cursor: pointer;
+  color: #111;
+}
+.modal-wrapper .close:hover { color: #007568; }
+.consent-content { text-align: left; margin-bottom: 20px; }
+.consent-content h4 { margin-top: 15px; }
+#accept-consent {
+  background: #007568;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+#accept-consent:hover { background: #00997d; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const consentModal = document.getElementById("consent-modal");
+
+  // Закрытие по крестику
+  consentModal.querySelector(".close").addEventListener("click", () => {
+    consentModal.classList.remove("active");
+  });
+
+  // Принятие согласия
+  document.getElementById("accept-consent").addEventListener("click", () => {
+    // Здесь можно добавить фиксацию согласия, например отправку в БД
+    alert("Согласие принято.");
+    consentModal.classList.remove("active");
+  });
+
+  // Закрытие при клике на фон
+  consentModal.addEventListener("click", (e) => {
+    if(e.target === consentModal) consentModal.classList.remove("active");
+  });
+});
+</script>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Получаем все модалки
+  const startModal = document.getElementById("start-modal");
+  const offerModal = document.getElementById("offer-modal");
+  const consentModal = document.getElementById("consent-modal");
+
+  // Крестики закрытия
+  document.querySelectorAll(".modal .close").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const modal = e.target.closest(".modal");
+      modal.classList.remove("active");
+    });
+  });
+
+document.querySelectorAll(".open-modal").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const targetId = btn.getAttribute("data-target");
+    const targetModal = document.getElementById(targetId);
+    if(targetModal) targetModal.classList.add("active");
+  });
+});
+
+  // Закрытие при клике на фон (не на контент)
+  document.querySelectorAll(".modal").forEach(modal => {
+    modal.addEventListener("click", (e) => {
+      if(e.target === modal) modal.classList.remove("active");
+    });
+  });
+});
+
+const btn = document.getElementById("mobile-menu-btn");
+const menu = document.getElementById("mobile-menu");
+
+btn.addEventListener("click", () => {
+  menu.classList.toggle("active");
+});
+
+document.querySelectorAll(".mobile-menu a").forEach(link => {
+  link.addEventListener("click", () => menu.classList.remove("active"));
+});
+
+</script>
+
+</body>
+</html>

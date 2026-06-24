@@ -1,0 +1,21 @@
+name: CI Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install deps
+        run: |
+          pip install pytest pytest-mock allure-pytest
+      - name: Run tests with Allure
+        run: |
+          pytest tests/ --alluredir=allure-results -v
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results
+          path: allure-results/

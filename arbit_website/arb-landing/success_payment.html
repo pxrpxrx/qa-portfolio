@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ARB — Оплата успешна</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           ПЕРЕМЕННЫЕ И ОСНОВНЫЕ НАСТРОЙКИ
+           ========================================= */
+        :root {
+            --accent: #008c7c; /* Бирюзовый акцент */
+            --accent-dark: #006b5b;
+            --text-color: #222;
+            --muted: #777;
+            --background-color: #f0f2f5;
+            --card-bg: #fff;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --font-primary: 'Manrope', sans-serif;
+            --font-secondary: Georgia, 'Times New Roman', serif;
+            --max-width: 1200px;
+            --spacing-large: 80px;
+            --spacing-medium: 40px;
+        }
+
+        /* =========================================
+           ГЛОБАЛЬНЫЙ СБРОС И СТРУКТУРА
+           ========================================= */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-color);
+            background-color: var(--background-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex-grow: 1; /* ГЛАВНОЕ: Занимает все доступное вертикальное пространство */
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--accent-dark); }
+        h1 { font-weight: 700; line-height: 1.2; margin-bottom: 0.5em; }
+
+        .container {
+            width: 90%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        
+        .cta {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background 0.3s, transform 0.1s;
+            display: inline-block;
+        }
+        .cta:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0, 140, 124, 0.3);
+        }
+
+        /* =========================================
+           ШАПКА САЙТА (HEADER) - ЛОГО СЛЕВА, МЕНЮ В ЦЕНТРЕ, КНОПКА СПРАВА
+           ========================================= */
+        .site-header {
+            background: var(--card-bg);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px var(--shadow-light); 
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 20px;
+            max-width: var(--max-width); 
+            margin: 0 auto;
+        }
+
+        .logo img { width: 100px; height: auto; display: block; }
+
+        .topnav {
+            flex-grow: 1; 
+            display: flex;
+            justify-content: center; /* Центрируем ссылки */
+            gap: 30px;
+            font-size: 1.05rem;
+        }
+
+        .topnav a { font-weight: 500; padding: 5px 10px; color: var(--text-color); white-space: nowrap; }
+        .topnav a:hover { color: var(--accent); }
+        
+        .mobile-menu-btn { display: none; }
+
+        /* =========================================
+           ФУТЕР
+           ========================================= */
+        .site-footer {
+            background-color: var(--card-bg);
+            padding: 20px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            color: var(--muted);
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav a { margin-right: 20px; color: var(--muted); }
+        .all-rights { width: 100%; text-align: center; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(0, 0, 0, 0.05); }
+
+
+        /* =========================================
+           КАРТОЧКА СТАТУСА (SUCCESS) - ЦЕНТРИРОВАНИЕ
+           ========================================= */
+        .payment-status {
+            flex-grow: 1; 
+            display: flex;
+            align-items: center; /* Центр по вертикали */
+            justify-content: center; /* Центр по горизонтали */
+            text-align: center;
+            padding: var(--spacing-medium) 0;
+        }
+
+        .payment-status .container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px var(--shadow-medium);
+            max-width: 600px; 
+            width: 100%;
+        }
+
+        .success-title {
+            font-family: var(--font-secondary);
+            color: var(--accent);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        .success-icon {
+            font-size: 5rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+            display: block;
+        }
+        .tariffs-description { color: var(--text-color); margin: 0 auto 15px auto; font-size: 1.1em; }
+        .button-wrapper { margin-top: 30px; }
+
+        /* =========================================
+           АДАПТИВНЫЙ ДИЗАЙН
+           ========================================= */
+        @media (max-width: 900px) {
+            .header-inner { flex-direction: row; justify-content: space-between; gap: 0; }
+            .topnav, .cta { display: none; }
+            .logo img { width: 90px; }
+            .mobile-menu-btn { display: block; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--accent); padding: 5px; }
+            .footer-content { justify-content: center; text-align: center; }
+            .footer-nav { width: 100%; margin-bottom: 15px; }
+            .footer-nav a { margin: 0 10px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <div class="logo">
+            <img src="assets/A.png" alt="A" />
+        </div>
+        <nav class="topnav">
+            <a href="index.html#features">Функции</a>
+            <a href="index.html#pricing">Тарифы</a>
+            <a href="index.html#partners">Партнёры</a>
+        </nav>
+        <a class="cta" href="https://t.me/arbit_but_bot" target="_blank">Телеграм бот</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+    </div>
+</header>
+
+<main>
+    <section class="payment-status success">
+        <div class="container">
+            <span class="success-icon">✅</span>
+            <h1 class="success-title">Оплата прошла успешно!</h1>
+            <p class="tariffs-description">
+                Ваш платёж успешно обработан. Средства зачислены на баланс бота.
+            </p>
+            <p>
+                Пожалуйста, перейдите в Telegram-бот, чтобы начать работу.
+            </p>
+            <div class="button-wrapper">
+                <a href="https://t.me/arbit_but_bot" class="cta">Перейти в Telegram-бот</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-content">
+        <div class="footer-left">
+            <nav class="footer-nav">
+                <a href="index.html#features">Функционал</a>
+                <a href="index.html#pricing">Тарифы</a>
+                <a href="index.html#partners">Партнеры</a>
+            </nav>
+        </div>
+        <div class="footer-right">
+            <a href="index.html#offer-modal">Публичная оферта</a>
+        </div>
+        <div class="all-rights">
+            <small>© ARB 2025 Все права защищены</small>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const btn = document.getElementById("mobile-menu-btn");
+    if (btn) {
+        btn.addEventListener("click", () => {
+            // Здесь может быть логика показа/скрытия мобильного меню
+            console.log("Mobile menu button clicked on status page.");
+        });
+    }
+</script>
+
+</body>
+</html>

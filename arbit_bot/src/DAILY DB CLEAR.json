@@ -1,0 +1,80 @@
+{
+  "name": "DAILY DB CLEAR",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 4,
+              "triggerAtMinute": 19
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6035875b-6d0d-4fea-82b2-a89286dc7cb7",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "deleteTable",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "coin_data",
+          "mode": "list",
+          "cachedResultName": "coin_data"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        176,
+        0
+      ],
+      "id": "4c8f489a-aaa9-470b-866e-44ce306cbf38",
+      "name": "Delete table or rows",
+      "credentials": {
+        "postgres": {
+          "id": "YcdBo4B5ZTP1Pm1o",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Delete table or rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b00b19dd-e66e-43d4-a8d6-d24b4b0ab6f8",
+  "meta": {
+    "instanceId": "e1a1371ab2cebed24df7bca38a441b1168715f3e1404bae350db77119eb77081"
+  },
+  "id": "Mrd3zBIeQmP3thU8",
+  "tags": []
+}

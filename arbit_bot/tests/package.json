@@ -1,0 +1,13 @@
+{
+  "name": "crypto-arbitrage-tests",
+  "version": "1.0.0",
+  "description": "Автотесты для Crypto Arbitrage Bot",
+  "main": "test_spread_logic.js",
+  "scripts": {
+    "test:logic": "node tests/test_spread_logic.js",
+    "test:api": "node tests/test_api_basic.js",
+    "test:all": "npm run test:logic && npm run test:api"
+  },
+  "author": "Константин Горбунов",
+  "license": "MIT"
+}

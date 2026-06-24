@@ -1,0 +1,24 @@
+# n8n
+.n8n/
+*.sqlite
+*.sqlite-journal
+
+# Secrets / credentials
+.env
+*.pem
+*.key
+*.crt
+credentials.json
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

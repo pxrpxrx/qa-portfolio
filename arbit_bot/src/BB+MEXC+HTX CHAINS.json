@@ -1,0 +1,1760 @@
+{
+  "name": "BB+MEXC+HTX CHAINS",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v5/market/tickers?category=spot",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2448,
+        80
+      ],
+      "id": "bbb89fd6-6738-492e-bedf-1157a4d6609c",
+      "name": "BYBIT"
+    },
+    {
+      "parameters": {
+        "url": "https://api.mexc.com/api/v3/ticker/24hr",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2448,
+        -240
+      ],
+      "id": "e0dafed6-6876-44e0-94f4-48f0c5fda97e",
+      "name": "MEXC PAIRS"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "allCoins",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        80
+      ],
+      "id": "b097cf1e-11bd-4bd4-a08e-70137ffb751b",
+      "name": "Split Out6"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1680,
+        80
+      ],
+      "id": "a3975760-a5fe-4d59-877d-0c096e009cdb",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 0.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        928,
+        240
+      ],
+      "id": "563f7fbf-9c25-4203-96da-6ea4ce64d96f",
+      "name": "Wait",
+      "webhookId": "bc90d080-89a3-48bc-b018-aaefa170dc1d"
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\nconst uniqueSymbols = new Set();\n\nfor (const item of items) {\n  if (item.json && item.json.symbol) {\n    let symbol = item.json.symbol;\n    // Удаляем из символа пары USDT, USDC, BTC, BUSD и т.д.\n    symbol = symbol.replace(/USDT|USDC|BTC|BUSD|ETH|BNB|EUR|USD|DAI|PLN|TRY|TUSD/i, '');\n    uniqueSymbols.add(symbol);\n  }\n}\n\n// Конвертируем Set в массив объектов для вывода в n8n\nconst finalSymbols = [...uniqueSymbols].map(symbol => ({ symbol: symbol }));\n\nreturn [{ json: { allCoins: finalSymbols } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2096,
+        80
+      ],
+      "id": "06cc95c8-50f6-4b6b-b277-34ce8d4595a4",
+      "name": "NAKED COINS"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result.list",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -2272,
+        80
+      ],
+      "id": "34462e08-e1e6-4d0e-80ca-1b800c7010fb",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\nconst uniqueSymbols = new Set();\n\nfor (const item of items) {\n  if (item.json && item.json.symbol) {\n    let symbol = item.json.symbol;\n    // Удаляем из символа пары USDT, USDC, BTC, BUSD и т.д.\n    symbol = symbol.replace(/USDT|USDC|BTC|BUSD|ETH|BNB|EUR|USD|DAI|PLN|TRY|TUSD/i, '');\n    uniqueSymbols.add(symbol);\n  }\n}\n\n// Конвертируем Set в массив объектов для вывода в n8n\nconst finalSymbols = [...uniqueSymbols].map(symbol => ({ symbol: symbol }));\n\nreturn [{ json: { allCoins: finalSymbols } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2096,
+        -240
+      ],
+      "id": "e3c73b9c-1a40-4eaa-93be-6bc724032333",
+      "name": "NAKED COINS1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "allCoins",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        -240
+      ],
+      "id": "bef8142f-a44e-476d-a6a9-e23721856231",
+      "name": "Split Out7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Вставьте сюда ваши API-ключи MEXC и URL вашего Cloudflare Worker\nconst apiKey = 'mx0vglEMixbIaT9bIQ';\nconst cloudflareWorkerUrl = 'https://mexcsign.qwerhui45.workers.dev/';\nconst recvWindow = '50000';\n\nfor (const item of items) {\n  if (!item.json || !item.json.symbol) {\n    continue;\n  }\n\n  // Получаем время и символ из входных данных\n  const serverTime = $input.first().json.serverTime;\n  const coinSymbol = item.json.symbol;\n\n  // Формируем строку параметров для подписи\n  // Важно: MEXC требует, чтобы параметры были отсортированы. \n  // Мы создадим их в алфавитном порядке здесь, чтобы Worker не путался.\n  const urlParams = `recvWindow=${recvWindow}&symbol=${coinSymbol}&timestamp=${String(serverTime)}`;\n  \n  // Добавляем все данные, которые будут нужны в следующих узлах\n  item.json.sign_payload = urlParams;\n  item.json.mexcApiKey = apiKey;\n  item.json.mexcTimestamp = String(serverTime);\n  item.json.mexcRecvWindow = recvWindow;\n  item.json.mexcSymbol = coinSymbol;\n  item.json.cloudflareUrl = cloudflareWorkerUrl;\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -784,
+        -112
+      ],
+      "id": "4fbafaa7-6e5c-49c2-a615-599ee8c65fa3",
+      "name": "MEXC AUTH"
+    },
+    {
+      "parameters": {
+        "url": "https://api.mexc.com/api/v3/capital/config/getall",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "recvWindow",
+              "value": "={{ $json.mexcRecvWindow }}"
+            },
+            {
+              "name": "signature",
+              "value": "={{ $json.signature }}"
+            },
+            {
+              "name": "symbol",
+              "value": "={{ $json.mexcSymbol }}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ $json.mexcTimestamp }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-MEXC-APIKEY",
+              "value": "={{ $json.mexcApiKey }}"
+            }
+          ]
+        },
+        "options": {
+          "lowercaseHeaders": false
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        -112
+      ],
+      "id": "ec24b938-2827-44dd-9d32-ad54c984c966",
+      "name": "MEXC AUTH1",
+      "retryOnFail": false,
+      "executeOnce": false,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "serverTime",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        -112
+      ],
+      "id": "e9aca763-1146-4b2c-9ca3-541cadd9bc79",
+      "name": "SERVER_TIME"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1152,
+        -240
+      ],
+      "id": "f7246342-b079-4d53-9eb3-d9e26009885e",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v5/market/time",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1392,
+        208
+      ],
+      "id": "3ee203c0-18a1-4477-bba4-0b4488e0b99c",
+      "name": "Get Bybit Server Time"
+    },
+    {
+      "parameters": {
+        "jsCode": "const recvWindow = 5000; \n\nfor (const item of items) {\n  // Получаем время из предыдущего узла\n  const serverTime = $node['Get Bybit Server Time'].json.time;\n  const coinSymbol = item.json.symbol;\n  const apiKey = 'LCaj2FHvvmrUwimbVo';\n  \n  // Создаем строку параметров URL, включая recvWindow\n  // ВАЖНО: порядок параметров должен быть таким же, как в документации Bybit\n  const urlParams = `recvWindow=${recvWindow}&coin=${coinSymbol}`;\n  \n  // Создаем строку для подписи В ПРАВИЛЬНОМ ПОРЯДКЕ\n  // Порядок по документации Bybit V5: timestamp + apiKey + params\n  const signPayload = `${serverTime}${apiKey}${urlParams}`;\n  \n  // Добавляем все необходимые данные в JSON для следующих узлов\n  item.json.sign_payload = signPayload;\n  item.json.serverTime = serverTime;\n  item.json.apiKey = apiKey;\n  item.json.recvWindow = recvWindow;\n  item.json.bybitUrl = `https://api.bybit.com/v5/asset/coin/query-info?${urlParams}`;\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -784,
+        240
+      ],
+      "id": "d0dfdc37-e5bc-41c3-a033-71210940aba6",
+      "name": "BYBIT HEAD"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Этот код объединяет три входящих значения:\n// 1. coin (например, { \"symbol\": \"STRK\" })\n// 2. time (например, { \"time\": 1757786394361 })\n\nconst mergedItems = [];\nlet coinItem = null;\nlet timeItem = null;\n\n// Проходим по всем элементам, которые переданы в этот узел\nfor (const item of items) {\n  if (item.json.symbol) {\n    coinItem = item.json;\n  }\n  if (item.json.time) {\n    timeItem = item.json;\n  }\n}\n\n// Проверяем, что все три элемента есть\nif (coinItem && timeItem) {\n  const mergedItem = {\n    ...coinItem,\n    ...timeItem\n  };\n  mergedItems.push({ json: mergedItem });\n}\n\nreturn mergedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -992,
+        80
+      ],
+      "id": "3777f467-f4d0-415e-b7cd-730c30ccef7e",
+      "name": "MASSIVE JOIN"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://bybitsign.{your_nick}.workers.dev/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "stringToSign",
+              "value": "={{$json[\"sign_payload\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -560,
+        80
+      ],
+      "id": "e29ac2e9-2d63-44c9-9b96-2a25f47c93d3",
+      "name": "Request Signature from Cloudflare"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1152,
+        80
+      ],
+      "id": "94c263ab-e2fc-4bd1-b865-3a69f90b04e1",
+      "name": "TIME + COIN"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -384,
+        240
+      ],
+      "id": "5c9dd301-9c43-4c62-a425-83444f1fbb06",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.bybitUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-BAPI-API-KEY",
+              "value": "={{ $json.apiKey }}"
+            },
+            {
+              "name": "X-BAPI-TIMESTAMP",
+              "value": "={{ $json.serverTime }}"
+            },
+            {
+              "name": "X-BAPI-SIGN",
+              "value": "={{ $json.signature }}"
+            },
+            {
+              "name": "X-BAPI-RECVWINDOW",
+              "value": "={{ $json.recvWindow }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        240
+      ],
+      "id": "50141e58-cbd6-47db-baec-7b26c19ac190",
+      "name": "BYBIT AUTH2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Этот код предполагает, что на вход подается массив из двух элементов:\n// Первый элемент - результат запроса к Cloudflare Worker\n// Второй элемент - результат запроса к Bybit\n// Важно убедиться, что узлы в вашем рабочем процессе подключены в правильном порядке.\n\nconst signatureData = items[0].json; // Данные с подписью\nconst bybitData = items[1].json; // Данные от Bybit\n\n// Объединяем два объекта в один, используя деструктуризацию\nconst mergedObject = {\n  ...signatureData,\n  ...bybitData\n};\n\n// Возвращаем объединенный объект в виде одного элемента массива\nreturn [{ json: mergedObject }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        240
+      ],
+      "id": "d9b65f6e-4589-4648-be99-5a7815b086f6",
+      "name": "JOIN"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Этот код объединяет три входящих значения:\n// 1. coin (например, { \"symbol\": \"STRK\" })\n// 2. time (например, { \"time\": 1757786394361 })\n\nconst mergedItems = [];\nlet coinItem = null;\nlet timeItem = null;\n\n// Проходим по всем элементам, которые переданы в этот узел\nfor (const item of items) {\n  if (item.json.symbol) {\n    coinItem = item.json;\n  }\n  if (item.json.serverTime) {\n    timeItem = item.json;\n  }\n}\n\n// Проверяем, что все три элемента есть\nif (coinItem && timeItem) {\n  const mergedItem = {\n    ...coinItem,\n    ...timeItem\n  };\n  mergedItems.push({ json: mergedItem });\n}\n\nreturn mergedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -992,
+        -240
+      ],
+      "id": "c2fd8eba-d790-4581-be26-c59ebf073db5",
+      "name": "MASSIVE JOIN1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.cloudflareUrl }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "stringToSign",
+              "value": "={{ $json.sign_payload }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -560,
+        -240
+      ],
+      "id": "c4ef10c1-9cb5-4c4e-be82-bfc3c0133c1a",
+      "name": "MEXC CLOUD SIGN"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -384,
+        -112
+      ],
+      "id": "aad1932c-2ccd-4dec-b10b-1befc8897785",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Этот код предполагает, что на вход подается массив из двух элементов:\n// Первый элемент - результат запроса к Cloudflare Worker\n// Второй элемент - результат запроса к Bybit\n// Важно убедиться, что узлы в вашем рабочем процессе подключены в правильном порядке.\n\nconst signatureData = items[0].json; // Данные с подписью\nconst bybitData = items[1].json; // Данные от Bybit\n\n// Объединяем два объекта в один, используя деструктуризацию\nconst mergedObject = {\n  ...signatureData,\n  ...bybitData\n};\n\n// Возвращаем объединенный объект в виде одного элемента массива\nreturn [{ json: mergedObject }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        -112
+      ],
+      "id": "6fdd53bf-dccf-49bf-bf47-dc26cf1ae0bb",
+      "name": "JOIN1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.mexc.com/api/v3/exchangeInfo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1488,
+        -112
+      ],
+      "id": "445ab8db-a547-41dc-813d-41e15e5ab4e1",
+      "name": "Get MEXC Server Time"
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\n\n// Обрабатываем каждый элемент, который пришел с предыдущего узла\nfor (const item of items) {\n  // Проверяем, что ответ API успешен и содержит поле \"rows\"\n  if (item.json && item.json.retMsg === 'success' && item.json.result && item.json.result.rows) {\n    \n    // Проверяем, что массив \"rows\" не пуст\n    if (item.json.result.rows.length > 0) {\n      const rows = item.json.result.rows;\n\n      for (const row of rows) {\n        // Убедимся, что у нас есть имя монеты\n        const coinName = row.coin;\n        \n        // Проверяем, что массив 'chains' существует и не пуст\n        if (row.chains && row.chains.length > 0) {\n          for (const network of row.chains) {\n            // Создаем объект с ключами, которые соответствуют названиям полей в вашей таблице Airtable\n            processedItems.push({\n              json: {\n                // Обратите внимание на то, что ключи здесь совпадают с названиями столбцов в вашей таблице\n                coin_name: coinName,\n                chain_type: network.chainType,\n                withdraw_fee: network.withdrawFee,\n                deposit_min: network.depositMin,\n                withdraw_min: network.withdrawMin,\n                confirmation: network.confirmation,\n                chain: network.chain,\n                exchange: 'Bybit',\n                last_updated: new Date().toISOString()\n              }\n            });\n          }\n        }\n      }\n    }\n  }\n}\n\nreturn processedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        240
+      ],
+      "id": "922fbbc8-3ac5-4aae-b371-3ea33cb5157a",
+      "name": "RAW REC",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const transformedData = [];\n\n// Проходимся по каждому элементу во входном массиве items\nfor (const item of items) {\n    // Получаем главный объект монеты\n    const coinData = item.json;\n    \n    // Получаем имя монеты\n    const coinName = coinData.coin;\n\n    // Если у монеты есть список сетей, перебираем его\n    if (Array.isArray(coinData.networkList) && coinData.networkList.length > 0) {\n        for (const chain of coinData.networkList) {\n            \n            // Создаем объект с правильными именами полей для PostgreSQL\n            const record = {\n                coin_name: coinName,\n                chain_type: chain.network,\n                withdraw_fee: chain.withdrawFee,\n                deposit_min: chain.minDeposit,\n                withdraw_min: chain.minWithdraw,\n                confirmation: chain.minConfirm, // Теперь это число, а не строка\n                chain: chain.netWork,\n                exchange: 'MEXC',\n                \n                // ***********************************************\n                // НОВОЕ ПОЛЕ: Извлекаем адрес контракта из поля 'contract'\n                contract_address: chain.contract || null,\n                // ***********************************************\n                \n                last_updated: new Date().toISOString()\n            };\n            \n            // Добавляем созданную запись в массив\n            transformedData.push({ json: record });\n        }\n    }\n}\n\nreturn transformedData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        -112
+      ],
+      "id": "a73d0b43-d69f-421f-ab08-7fd614c8a314",
+      "name": "RAW REC1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -1696,
+        -240
+      ],
+      "id": "bef64a49-f314-469f-ae94-6769aba3f56e",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "coin_data",
+          "mode": "list",
+          "cachedResultName": "coin_data"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "coin_name": "={{ $json.coin_name }}",
+            "withdraw_fee": "={{ $json.withdraw_fee }}",
+            "chain_type": "={{ $json.chain_type }}",
+            "confirmation": "={{ $json.confirmation }}",
+            "exchange": "={{ $json.exchange }}",
+            "chain": "={{ $json.chain }}",
+            "contract_address": "={{ $json.contract_address }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "coin_name",
+              "displayName": "coin_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chain_type",
+              "displayName": "chain_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "withdraw_fee",
+              "displayName": "withdraw_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "confirmation",
+              "displayName": "confirmation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chain",
+              "displayName": "chain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "exchange",
+              "displayName": "exchange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "contract_address",
+              "displayName": "contract_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        736,
+        -112
+      ],
+      "id": "31199302-d533-43b3-807b-65aa345f5a86",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "YcdBo4B5ZTP1Pm1o",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "coin_data",
+          "mode": "list",
+          "cachedResultName": "coin_data"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "coin_name": "={{ $json.coin_name }}",
+            "chain_type": "={{ $json.chain_type }}",
+            "withdraw_fee": "={{ $json.withdraw_fee }}",
+            "confirmation": "={{ $json.confirmation }}",
+            "chain": "={{ $json.chain }}",
+            "exchange": "={{ $json.exchange }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "coin_name",
+              "displayName": "coin_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chain_type",
+              "displayName": "chain_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "withdraw_fee",
+              "displayName": "withdraw_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "deposit_min",
+              "displayName": "deposit_min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "withdraw_min",
+              "displayName": "withdraw_min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "confirmation",
+              "displayName": "confirmation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chain",
+              "displayName": "chain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "exchange",
+              "displayName": "exchange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_updated",
+              "displayName": "last_updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        736,
+        240
+      ],
+      "id": "0cea030b-350b-4f20-97be-83fc01607854",
+      "name": "Insert rows in a table1",
+      "credentials": {
+        "postgres": {
+          "id": "YcdBo4B5ZTP1Pm1o",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -2256,
+        -560
+      ],
+      "id": "c42b45dd-09ae-4961-bb49-8932b50cb687",
+      "name": "Split Out8"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1488,
+        -560
+      ],
+      "id": "4d549d07-3748-4de8-95e6-7a57634a6fa1",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Используем items.reduce для итерации и постепенного объединения\nconst mergedObject = items.reduce((accumulator, currentItem) => {\n    // Получаем сам объект (извлекая его из item.json, если это n8n формат)\n    const currentJson = currentItem.json || currentItem;\n    \n    // Объединяем текущий объект (currentJson) с аккумулятором\n    // Если ключи совпадают, будет использоваться значение из текущего (последнего) объекта.\n    return {\n        ...accumulator,\n        ...currentJson\n    };\n}, {}); // Начинаем с пустого объекта\n\n// Возвращаем результат в формате, удобном для n8n (один элемент с объединенным JSON)\nreturn [{\n    json: mergedObject\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1312,
+        -560
+      ],
+      "id": "febb3bc8-10a7-42b7-92df-87dd96b3f19d",
+      "name": "JOIN2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Этот код предназначен для использования в узле, следующем за узлом получения серверного времени.\n// Предполагается, что items[0].json содержит поле \"data\" с UNIX-таймстемпом.\n\n// 1. Извлечение серверного времени из первого элемента массива (где находится ответ HTX /common/timestamp)\nconst htxTimeData = items[0].json;\nconst rawServerTimeMs = htxTimeData.data; // Получаем 1759672349830\n\n// Преобразуем UNIX-таймстемп (в миллисекундах) в формат ISO 8601 UTC\n// HTX требует формат YYYY-MM-DDTHH:mm:ss (без миллисекунд и 'Z')\nconst serverTimeISO = new Date(Number(rawServerTimeMs)).toISOString().slice(0, 19);\n\n// <--- ВАШ ПУБЛИЧНЫЙ КЛЮЧ ---\nconst AccessKeyId = 'h6n2d4f5gh-a1e3d346-026874f5-3789d'; \n// Если ключ приходит из настроек, используйте:\n// const AccessKeyId = settingsItem.apiKey; \n// ----------------------------\n\n// --- ПАРАМЕТРЫ ЗАПРОСА ---\nconst method = 'GET';\nconst host = 'api.huobi.pro'; \n// Конечная точка для получения информации о всех валютах и их цепочках\nconst path = '/v2/reference/currencies'; \n    \n// 2. Обязательные query-параметры для ЛЮБОГО подписанного запроса HTX\nconst queryParams = {\n    'AccessKeyId': AccessKeyId,\n    'SignatureMethod': 'HmacSHA256',\n    'SignatureVersion': '2',\n    'Timestamp': serverTimeISO // Используем преобразованное время в ISO 8601\n};\n\n// 3. Сортировка параметров и формирование строки запроса (без подписи!)\n// HTX требует, чтобы параметры были отсортированы по алфавиту для подписи.\nconst sortedKeys = Object.keys(queryParams).sort();\nconst queryString = sortedKeys.map(key => \n    // Важно: кодирование URL-компонентов\n    `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`\n).join('&');\n\n// 4. Формирование строки для подписи (String to Sign)\n// Эту строку нужно передать в Cloudflare Worker для HMAC-SHA256.\nconst signPayload = \n    `${method}\\n` +\n    `${host}\\n` +\n    `${path}\\n` +\n    `${queryString}`;\n\n// 5. Подготовка данных для следующего узла (Cloudflare Worker)\nconst outputItem = {\n    json: {\n        // Строка для подписи (для внешнего ресурса)\n        signPayload: signPayload, \n        \n        // Финальный URL, куда будет добавлена подпись (Signature)\n        baseUrlWithParams: `https://${host}${path}?${queryString}`, \n        \n        // Дополнительные параметры для удобства\n        host: host,\n        path: path,\n        method: method,\n        AccessKeyId: AccessKeyId,\n        \n        // Передаем точное время (для отладки)\n        serverTimeISO: serverTimeISO,\n\n        // Заголовки (обычно не нужны для HTX, но для полноты)\n        headers: {\n            'Content-Type': 'application/json'\n        }\n    }\n};\n\n// Поскольку это запрос для получения настроек, на выходе должен быть один элемент.\nreturn [outputItem];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        -432
+      ],
+      "id": "9acf54f7-22d3-466e-bf1b-045f85779a2e",
+      "name": "GATE AUTH"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://htxchains.{your_nick}.workers.dev/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.requestBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -656,
+        -528
+      ],
+      "id": "a63e3f83-c650-4988-b3a0-67a1331b4ba3",
+      "name": "Cloudflare Sign"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -400,
+        -432
+      ],
+      "id": "6f528cf7-e360-4644-b2ea-7e16e5360f85",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Используем items.reduce для итерации и постепенного объединения\nconst mergedObject = items.reduce((accumulator, currentItem) => {\n    // Получаем сам объект (извлекая его из item.json, если это n8n формат)\n    const currentJson = currentItem.json || currentItem;\n    \n    // Объединяем текущий объект (currentJson) с аккумулятором\n    // Если ключи совпадают, будет использоваться значение из текущего (последнего) объекта.\n    return {\n        ...accumulator,\n        ...currentJson\n    };\n}, {}); // Начинаем с пустого объекта\n\n// Возвращаем результат в формате, удобном для n8n (один элемент с объединенным JSON)\nreturn [{\n    json: mergedObject\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -432
+      ],
+      "id": "36dd1716-1506-407a-9cf6-afc52065b21d",
+      "name": "JOIN3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\n\n// Обрабатываем каждый элемент, который пришел с предыдущего узла.\nfor (const item of items) {\n    const currencyInfo = item.json;\n\n    // Убедимся, что у нас есть название монеты и массив сетей\n    if (currencyInfo && currencyInfo.currency && currencyInfo.chains && currencyInfo.chains.length > 0) {\n        \n        // 1. Монета в верхнем регистре\n        let coinSymbolUpperCase = currencyInfo.currency.toUpperCase();\n        \n        // ***********************************************\n        // ОПЕРАЦИЯ: Преобразование 'SOLANA' в 'SOL'\n        // ***********************************************\n        if (coinSymbolUpperCase === 'SOLANA') {\n            coinSymbolUpperCase = 'SOL';\n        }\n\n        // Проходим по каждой сети в массиве 'chains'\n        for (const network of currencyInfo.chains) {\n            \n            let rawChainName;\n            \n            // 2. Логика определения названия сети:\n            // Приоритет отдается полю 'baseChain', если оно существует и не пустое.\n            if (network.baseChain) {\n                rawChainName = network.baseChain;\n            } else {\n                // Если baseChain нет, используем стандартное поле 'chain'.\n                rawChainName = network.chain;\n            }\n            \n            // 3. Преобразование названия сети в верхний регистр\n            const chainNameUpperCase = rawChainName ? rawChainName.toUpperCase() : null;\n            \n            // Создаем новый объект для каждой отдельной сети\n            processedItems.push({\n                json: {\n                    // Используем преобразованное название монеты\n                    coin_name: coinSymbolUpperCase, \n                    // Итоговое название сети\n                    chain: chainNameUpperCase, \n                    \n                    exchange: 'HTX', \n                    \n                    // ***********************************************\n                    // НОВОЕ ПОЛЕ: АДРЕС КОНТРАКТА\n                    // Используем contractAddress, если оно существует, иначе null\n                    contract_address: network.contractAddress || null,\n                    // ***********************************************\n\n                    // Извлекаем ключевые параметры:\n                    deposit_allowed: network.depositStatus === 'allowed',\n                    withdraw_allowed: network.withdrawStatus === 'allowed',\n                    min_withdraw_amount: network.minWithdrawAmt,\n                    withdraw_fee: network.transactFeeWithdraw,\n                    fee_type: network.withdrawFeeType,\n                    \n                    // Дополнительные данные для отладки, если нужно\n                    // raw_chain_used: network.baseChain ? 'baseChain' : 'chain'\n                }\n            });\n        }\n    }\n}\n\nreturn processedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        -432
+      ],
+      "id": "2f8f7f34-9f32-4301-99af-51dc3f8d458c",
+      "name": "RAW REC2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "coin_data",
+          "mode": "list",
+          "cachedResultName": "coin_data"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "coin_name": "={{ $json.coin_name }}",
+            "exchange": "={{ $json.exchange }}",
+            "chain": "={{ $json.chain }}",
+            "withdraw_fee": "={{ $json.withdraw_fee }}",
+            "contract_address": "={{ $json.contract_address }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "coin_name",
+              "displayName": "coin_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chain_type",
+              "displayName": "chain_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "withdraw_fee",
+              "displayName": "withdraw_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "confirmation",
+              "displayName": "confirmation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "chain",
+              "displayName": "chain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exchange",
+              "displayName": "exchange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "contract_address",
+              "displayName": "contract_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        736,
+        -432
+      ],
+      "id": "67e89ca8-2ef9-41e2-b932-92313a25db76",
+      "name": "Insert rows in a table2",
+      "credentials": {
+        "postgres": {
+          "id": "YcdBo4B5ZTP1Pm1o",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 4,
+              "triggerAtMinute": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2992,
+        -80
+      ],
+      "id": "0c922c34-913a-4447-bf28-add8e59784af",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://api.huobi.pro/v1/common/timestamp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1728,
+        -448
+      ],
+      "id": "f19485ec-ec23-46a0-b2d5-79d9cde4de04",
+      "name": "SERVER TIME"
+    },
+    {
+      "parameters": {
+        "jsCode": "const finalItems = [];\n\nfor (const item of items) {\n    const json = item.json;\n    \n    // Получаем многострочную строку\n    const signPayload = json.signPayload;\n    \n    // Экранируем символы перевода строки (\\n -> \\\\n)\n    // В JavaScript-коде нужно использовать ДВА слэша, чтобы получить ОДИН в строке.\n    // Например: 'a\\nb'.replace(/\\n/g, '\\\\n') даст 'a\\\\nb'\n    const safeSignPayload = signPayload.replace(/\\n/g, '\\\\n');\n    \n    // Формируем тело запроса для Cloudflare Worker\n    json.requestBody = {\n        signPayload: safeSignPayload,\n        baseUrlWithParams: json.baseUrlWithParams\n    };\n    \n    finalItems.push({ json });\n}\n\nreturn finalItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -864,
+        -528
+      ],
+      "id": "8ba66676-f554-4e7b-97de-504fa4418d21",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -432
+      ],
+      "id": "a6af6648-86a4-43ca-a74d-b1c130917378",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "base-currency",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1936,
+        -560
+      ],
+      "id": "0a9eeb89-dadb-4b77-a58c-9a9c81472326",
+      "name": "Split Out2"
+    },
+    {
+      "parameters": {
+        "url": "https://api.huobi.pro/v1/common/symbols",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2448,
+        -560
+      ],
+      "id": "e4305c1b-6921-4ff1-9011-5878f8392945",
+      "name": "HTX1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a95901fb-66c4-449a-a0bc-708caaeb03d1",
+              "leftValue": "={{ $json.networkList[0].withdrawEnable }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "4be110e8-88ab-4824-9c3d-cdaa676dcb59",
+              "leftValue": "={{ $json.networkList[0].depositEnable }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        -112
+      ],
+      "id": "183ac48c-3873-4fde-bbb1-8fd5adced68e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1c42fe2-c6c6-44c5-83c7-97fe12d28c30",
+              "leftValue": "={{ $json.chains[0].depositStatus }}",
+              "rightValue": "allowed",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "f5e533a8-686c-4517-8b3a-f247faea5fb7",
+              "leftValue": "={{ $json.chains[0].withdrawStatus }}",
+              "rightValue": "allowed",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        -432
+      ],
+      "id": "cae75d92-886d-4f3f-882d-7db39706dd02",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.finalUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        -432
+      ],
+      "id": "92217de1-2972-4c33-a0e5-3de724a55217",
+      "name": "HTX  CHAINS",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\n\n// Обрабатываем каждый элемент, который пришел с предыдущего узла.\nfor (const item of items) {\n    const currencyInfo = item.json;\n\n    // Убедимся, что у нас есть название монеты и массив сетей\n    if (currencyInfo && currencyInfo.currency && currencyInfo.chains && currencyInfo.chains.length > 0) {\n        \n        // 1. Монета в верхнем регистре\n        let coinSymbolUpperCase = currencyInfo.currency.toUpperCase();\n        \n        // ***********************************************\n        // НОВАЯ ОПЕРАЦИЯ: Преобразование 'SOLANA' в 'SOL'\n        // ***********************************************\n        if (coinSymbolUpperCase === 'SOLANA') {\n            coinSymbolUpperCase = 'SOL';\n        }\n\n        // Проходим по каждой сети в массиве 'chains'\n        for (const network of currencyInfo.chains) {\n            \n            let rawChainName;\n            \n            // 2. Логика определения названия сети:\n            // Приоритет отдается полю 'baseChain', если оно существует и не пустое.\n            if (network.baseChain) {\n                rawChainName = network.baseChain;\n            } else {\n                // Если baseChain нет, используем стандартное поле 'chain'.\n                rawChainName = network.chain;\n            }\n            \n            // 3. Преобразование названия сети в верхний регистр\n            const chainNameUpperCase = rawChainName ? rawChainName.toUpperCase() : null;\n            \n            // Создаем новый объект для каждой отдельной сети\n            processedItems.push({\n                json: {\n                    // Используем преобразованное название монеты\n                    coin_name: coinSymbolUpperCase, \n                    // Итоговое название сети\n                    chain: chainNameUpperCase, \n                    \n                    exchange: 'HTX', \n                    \n                    // Извлекаем ключевые параметры:\n                    deposit_allowed: network.depositStatus === 'allowed',\n                    withdraw_allowed: network.withdrawStatus === 'allowed',\n                    min_withdraw_amount: network.minWithdrawAmt,\n                    withdraw_fee: network.transactFeeWithdraw,\n                    fee_type: network.withdrawFeeType,\n                    \n                    // Дополнительные данные для отладки, если нужно\n                    // raw_chain_used: network.baseChain ? 'baseChain' : 'chain'\n                }\n            });\n        }\n    }\n}\n\nreturn processedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        -560
+      ],
+      "id": "3ca5165a-9739-4415-8644-e41bf4c23a63",
+      "name": "RAW REC3",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const transformedData = [];\n\n// Проходимся по каждому элементу во входном массиве items\nfor (const item of items) {\n  // Получаем главный объект монеты\n  const coinData = item.json;\n  \n  // Получаем имя монеты\n  const coinName = coinData.coin;\n\n  // Если у монеты есть список сетей, перебираем его\n  if (Array.isArray(coinData.networkList) && coinData.networkList.length > 0) {\n    for (const chain of coinData.networkList) {\n      // Создаем объект с правильными именами полей для PostgreSQL\n      const record = {\n        coin_name: coinName,\n        chain_type: chain.network,\n        withdraw_fee: chain.withdrawFee,\n        deposit_min: chain.minDeposit,\n        withdraw_min: chain.minWithdraw,\n        confirmation: chain.minConfirm, // Теперь это число, а не строка\n        chain: chain.netWork,\n        exchange: 'MEXC',\n        last_updated: new Date().toISOString()\n      };\n      \n      // Добавляем созданную запись в массив\n      transformedData.push({ json: record });\n    }\n  }\n}\n\nreturn transformedData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        -240
+      ],
+      "id": "2aaeb10b-ecd2-4677-a191-a0b3839d01e2",
+      "name": "RAW REC4",
+      "alwaysOutputData": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "BYBIT": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MEXC PAIRS": {
+      "main": [
+        [
+          {
+            "node": "NAKED COINS1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out6": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get Bybit Server Time",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TIME + COIN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NAKED COINS": {
+      "main": [
+        [
+          {
+            "node": "Split Out6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "NAKED COINS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NAKED COINS1": {
+      "main": [
+        [
+          {
+            "node": "Split Out7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out7": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MEXC AUTH": {
+      "main": [
+        [
+          {
+            "node": "MEXC CLOUD SIGN",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "MEXC AUTH1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SERVER_TIME": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "MASSIVE JOIN1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Bybit Server Time": {
+      "main": [
+        [
+          {
+            "node": "TIME + COIN",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "BYBIT HEAD": {
+      "main": [
+        [
+          {
+            "node": "Request Signature from Cloudflare",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "MASSIVE JOIN": {
+      "main": [
+        [
+          {
+            "node": "BYBIT HEAD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request Signature from Cloudflare": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TIME + COIN": {
+      "main": [
+        [
+          {
+            "node": "MASSIVE JOIN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "JOIN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BYBIT AUTH2": {
+      "main": [
+        [
+          {
+            "node": "RAW REC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JOIN": {
+      "main": [
+        [
+          {
+            "node": "BYBIT AUTH2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MASSIVE JOIN1": {
+      "main": [
+        [
+          {
+            "node": "MEXC AUTH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "JOIN1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MEXC CLOUD SIGN": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get MEXC Server Time": {
+      "main": [
+        [
+          {
+            "node": "SERVER_TIME",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JOIN1": {
+      "main": [
+        [
+          {
+            "node": "MEXC AUTH1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAW REC": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAW REC1": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Get MEXC Server Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert rows in a table1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert rows in a table": {
+      "main": [
+        []
+      ]
+    },
+    "Split Out8": {
+      "main": [
+        [
+          {
+            "node": "Split Out2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "JOIN2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JOIN2": {
+      "main": [
+        [
+          {
+            "node": "GATE AUTH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GATE AUTH": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cloudflare Sign": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "JOIN3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JOIN3": {
+      "main": [
+        [
+          {
+            "node": "HTX  CHAINS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAW REC2": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTX1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MEXC PAIRS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "BYBIT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SERVER TIME": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Cloudflare Sign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "SERVER TIME",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTX1": {
+      "main": [
+        [
+          {
+            "node": "Split Out8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "RAW REC1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "RAW REC2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTX  CHAINS": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7fc1b05b-9263-46d4-a707-9f417809574d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1a1371ab2cebed24df7bca38a441b1168715f3e1404bae350db77119eb77081"
+  },
+  "id": "60Tm1odc7nnKCuvK",
+  "tags": []
+}

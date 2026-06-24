@@ -1,0 +1,135 @@
+{
+  "info": {
+    "name": "Crypto Arbitrage API Tests",
+    "description": "Коллекция для тестирования API бирж, используемых в проекте",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "MEXC",
+      "item": [
+        {
+          "name": "Get 24hr Tickers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.mexc.com/api/v3/ticker/24hr",
+              "protocol": "https",
+              "host": ["api", "mexc", "com"],
+              "path": ["api", "v3", "ticker", "24hr"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bybit",
+      "item": [
+        {
+          "name": "Get Spot Tickers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.bybit.com/v5/market/tickers?category=spot",
+              "protocol": "https",
+              "host": ["api", "bybit", "com"],
+              "path": ["v5", "market", "tickers"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "spot"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "HTX (Huobi)",
+      "item": [
+        {
+          "name": "Get Tickers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.huobi.pro/market/tickers",
+              "protocol": "https",
+              "host": ["api", "huobi", "pro"],
+              "path": ["market", "tickers"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gate.io",
+      "item": [
+        {
+          "name": "Get Spot Tickers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.gateio.ws/api/v4/spot/tickers",
+              "protocol": "https",
+              "host": ["api", "gateio", "ws"],
+              "path": ["api", "v4", "spot", "tickers"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bitget",
+      "item": [
+        {
+          "name": "Get Spot Tickers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.bitget.com/api/v2/spot/market/tickers",
+              "protocol": "https",
+              "host": ["api", "bitget", "com"],
+              "path": ["api", "v2", "spot", "market", "tickers"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "OKX",
+      "item": [
+        {
+          "name": "Get Spot Tickers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://www.okx.com/api/v5/market/tickers?instType=SPOT",
+              "protocol": "https",
+              "host": ["www", "okx", "com"],
+              "path": ["api", "v5", "market", "tickers"],
+              "query": [
+                {
+                  "key": "instType",
+                  "value": "SPOT"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

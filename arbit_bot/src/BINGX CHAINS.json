@@ -1,0 +1,488 @@
+{
+  "name": "BINGX CHAINS",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://bingxsign.{your_nick}.workers.dev/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"signatureString\": \"{{ $json.signatureString }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1872,
+        0
+      ],
+      "id": "9ab7760b-76d5-4456-bfc7-3ec8c1672799",
+      "name": "Cloudflare Sign"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2048,
+        112
+      ],
+      "id": "2aa7af46-3395-401e-8e67-984fcb3f59ce",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Этот код предполагает, что на вход подается массив из двух элементов:\n// Первый элемент - результат запроса к Cloudflare Worker\n// Второй элемент - результат запроса к Bybit\n// Важно убедиться, что узлы в вашем рабочем процессе подключены в правильном порядке.\n\nconst signatureData = items[0].json; // Данные с подписью\nconst bybitData = items[1].json; // Данные от Bybit\n\n// Объединяем два объекта в один, используя деструктуризацию\nconst mergedObject = {\n  ...signatureData,\n  ...bybitData\n};\n\n// Возвращаем объединенный объект в виде одного элемента массива\nreturn [{ json: mergedObject }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2208,
+        112
+      ],
+      "id": "53f8c0c8-a2d1-4b9e-a8d5-fc2e4f62fcec",
+      "name": "JOIN3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\nconst exchangeName = 'BingX'; \n\n// Карта соответствия полных названий сетей (ключи) их стандартизированным сокращениям (значения)\nconst networkMapping = {\n    \"ARBITRUM\": \"ARB\",\n    \"ERC20\": \"ETH\",\n    \"TRC20\": \"TRX\",\n    \"AVAX-C\": \"AVAX\",\n    \"BEP20\": \"BSC\",\n    \"OPTIMISM\": \"OP\",\n    \"POLYGON\": \"MATIC\"\n};\n\nfunction standardizeNetwork(networkName) {\n    // 1. Приводим входящее имя к верхнему регистру для соответствия ключам\n    const upperName = networkName.toUpperCase();\n    \n    // 2. Ищем в карте соответствия\n    // Если найдено, возвращаем стандартизированное сокращение.\n    // Если не найдено, возвращаем исходное (уже верхнее) имя.\n    const standardized = networkMapping[upperName] || upperName;\n\n    // Гарантируем, что результат всегда в верхнем регистре\n    return standardized.toUpperCase();\n}\n\n\nfor (const item of items) {\n    const currencyInfo = item.json;\n\n    if (currencyInfo && currencyInfo.networkList && currencyInfo.networkList.length > 0) {\n        \n        // Монету приводим к верхнему регистру для единообразия\n        const coinName = (currencyInfo.coin || currencyInfo.name || '').toUpperCase();\n        \n        for (const network of currencyInfo.networkList) {\n            \n            // --- СТАНДАРТИЗАЦИЯ ИМЕНИ СЕТИ ---\n            const standardizedChainName = standardizeNetwork(network.network);\n            \n            const withdrawEnabled = network.withdrawEnable;\n            \n            processedItems.push({\n                json: {\n                    coin_name: coinName,\n                    \n                    // Используем стандартизированное имя\n                    chain: standardizedChainName, \n                    \n                    withdraw_fee: network.withdrawFee,\n                    min_withdraw: network.withdrawMin,\n                    is_enabled: withdrawEnabled,\n                    \n                    // --- НОВОЕ ПОЛЕ: МИНИМАЛЬНЫЕ ПОДТВЕРЖДЕНИЯ ---\n                    min_confirm: network.minConfirm, \n                    \n                    exchange: exchangeName\n                }\n            });\n        }\n    }\n}\n\nreturn processedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3152,
+        112
+      ],
+      "id": "1b4eff65-c153-430d-b366-70153052c588",
+      "name": "RAW REC2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "coin_data",
+          "mode": "list",
+          "cachedResultName": "coin_data"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "coin_name": "={{ $json.coin_name }}",
+            "exchange": "={{ $json.exchange }}",
+            "chain": "={{ $json.chain }}",
+            "withdraw_fee": "={{ $json.withdraw_fee }}",
+            "confirmation": "={{ $json.min_confirm }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "coin_name",
+              "displayName": "coin_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chain_type",
+              "displayName": "chain_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "withdraw_fee",
+              "displayName": "withdraw_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "deposit_min",
+              "displayName": "deposit_min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "withdraw_min",
+              "displayName": "withdraw_min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "confirmation",
+              "displayName": "confirmation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "chain",
+              "displayName": "chain",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exchange",
+              "displayName": "exchange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_updated",
+              "displayName": "last_updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3344,
+        112
+      ],
+      "id": "297f391e-78f0-4d90-bb90-a314f4527a75",
+      "name": "Insert rows in a table2",
+      "credentials": {
+        "postgres": {
+          "id": "YcdBo4B5ZTP1Pm1o",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 4,
+              "triggerAtMinute": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        1216,
+        112
+      ],
+      "id": "99ba6edf-f1f9-410c-a08a-47b9ee178f92",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bd45fe88-dde9-47a3-adfa-48ed77df6a4b",
+              "leftValue": "={{ $json.networkList[0].withdrawEnable }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "ec7e57c2-255d-4076-b9ed-36e3f72790e9",
+              "leftValue": "={{ $json.networkList[0].depositEnable }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2912,
+        112
+      ],
+      "id": "1bcd33b3-cc70-4a4e-809c-a924714a39b1",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "https://open-api.bingx.com/openApi/swap/v2/server/time",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1408,
+        112
+      ],
+      "id": "46498005-3b46-4c55-908e-5a1510de6eee",
+      "name": "BINGX SERVER TIME"
+    },
+    {
+      "parameters": {
+        "jsCode": "const processedItems = [];\n\n// !!! ВАЖНО: Замените этот плейсхолдер на реальный публичный API Key !!!\nconst API_KEY_PLACEHOLDER = 'KgKtCV5I01hpvbKhOQV8WK6yqqnG9M1SZAuf5PoEnSdB20aoznCsmgOO4ZYg7rJBG5X7xuUOsFzOv7RXisg'; \n// Устанавливаем разумное время ожидания (в миллисекундах)\nconst RECV_WINDOW = 5000; \n\n// --- НАСТРОЙКИ BINGX API ---\n// Выносим константы URL за пределы цикла, чтобы избежать ReferenceError\nconst urlPath = '/openApi/wallets/v1/capital/config/getall';\nconst baseDomain = 'https://open-api.bingx.com'; \nconst method = 'GET';\n\nfor (const item of items) {\n    const timestamp = item.json.data?.serverTime || Math.floor(Date.now());\n    const apiKey = item.json.apiKey || API_KEY_PLACEHOLDER; \n    \n    // --- НАСТРОЙКИ BINGX API ---\n    const urlPath = '/openApi/wallets/v1/capital/config/getall';\n    const baseDomain = 'https://open-api.bingx.com';\n    // ...\n    \n    // --- 2. СБОРКА ПАРАМЕТРОВ (без сортировки) ---\n    \n    // Параметры для нашего запроса:\n    // 1. recvWindow\n    // 2. timestamp\n    // (Поскольку наш запрос не содержит symbol, нам нужны только эти два)\n    \n    const parameters = {\n        recvWindow: RECV_WINDOW,\n        timestamp: timestamp\n    };\n    \n    // ПОРЯДОК: Формируем строку вручную в ожидаемом порядке: recvWindow, timestamp\n    const signatureString = `recvWindow=${parameters.recvWindow}&timestamp=${parameters.timestamp}`;\n    \n    // --- 3. СОХРАНЕНИЕ ДАННЫХ ДЛЯ ДАЛЬНЕЙШИХ УЗЛОВ ---\n    \n    item.json.signatureString = signatureString; // Отправляется Worker'у\n    item.json.bingxBaseUrl = `${baseDomain}${urlPath}`;\n    \n    // Сохраняем все данные для финального HTTP-запроса\n    item.json.timestamp = timestamp;\n    item.json.apiKey = apiKey;\n    item.json.recvWindow = RECV_WINDOW; \n    \n    processedItems.push(item);\n}\n\nreturn processedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        112
+      ],
+      "id": "d3f10b03-083f-4bc1-b7da-4b9d323e5525",
+      "name": "BINGX AUTH"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.bingxBaseUrl }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "recvWindow",
+              "value": "5000"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ $json.timestamp }}"
+            },
+            {
+              "name": "signature",
+              "value": "={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-BX-APIKEY",
+              "value": "={{ $json.apiKey }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2496,
+        112
+      ],
+      "id": "31008294-e1cc-4b30-aa37-fee0254c93dc",
+      "name": "BINGX CHAINS",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2704,
+        112
+      ],
+      "id": "e8e17f31-8be1-49f6-b859-f00f1d5246cb",
+      "name": "Split Out"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Cloudflare Sign": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "JOIN3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JOIN3": {
+      "main": [
+        [
+          {
+            "node": "BINGX CHAINS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAW REC2": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert rows in a table2": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "BINGX SERVER TIME",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "RAW REC2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "BINGX SERVER TIME": {
+      "main": [
+        [
+          {
+            "node": "BINGX AUTH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BINGX AUTH": {
+      "main": [
+        [
+          {
+            "node": "Cloudflare Sign",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "BINGX CHAINS": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e0be69e1-eb81-467d-9430-26ab57916aca",
+  "meta": {
+    "instanceId": "e1a1371ab2cebed24df7bca38a441b1168715f3e1404bae350db77119eb77081"
+  },
+  "id": "W7vju85wQvfHNvyT",
+  "tags": []
+}

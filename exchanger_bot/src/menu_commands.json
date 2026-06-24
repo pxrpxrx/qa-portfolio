@@ -1,0 +1,7 @@
+[
+    { "command": "create", "description": "➕ Создать обмен" },
+    { "command": "rates", "description": "📊 Курсы и лимиты" },
+    { "command": "my_orders", "description": "📋 Мои заявки / Статус" },
+    { "command": "support", "description": "❓ Поддержка" },
+    { "command": "aml_kyc", "description": "🔒 Правила AML/KYC" }
+]

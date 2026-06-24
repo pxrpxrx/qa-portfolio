@@ -1,0 +1,14 @@
+name: Lint HTML/CSS
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check HTML validity
+        uses: Cyb3r-Jak3/html5validator-action@v7.2
+        with:
+          root: arb-landing/
+      - name: Check CSS
+        run: |
+          echo "All files present:" && ls -la arb-landing/

@@ -1,0 +1,60 @@
+{
+  "info": {
+    "name": "Fractal Trader Bot API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Balance",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/balance"
+      }
+    },
+    {
+      "name": "Place Order",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/order",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"symbol\": \"BTCUSDT\", \"side\": \"BUY\", \"quantity\": 0.01}"
+        }
+      }
+    },
+    {
+      "name": "Get Open Positions",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/positions"
+      }
+    },
+    {
+      "name": "Cancel Order",
+      "request": {
+        "method": "DELETE",
+        "url": "{{base_url}}/api/order/{{order_id}}"
+      }
+    },
+    {
+      "name": "Get Market Data",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/market/{{symbol}}"
+      }
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/health"
+      }
+    }
+  ],
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:8080"},
+    {"key": "symbol", "value": "BTCUSDT"},
+    {"key": "order_id", "value": "12345"}
+  ]
+}

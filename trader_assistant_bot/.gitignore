@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets
+src/utilities/config/config.json
+*.key
+*.pem
+
+# Data files
+*.db
+*.sqlite
+bingx_symbols.json
+daily_stats.json
+
+# Reports
+htmlcov/
+.coverage
+*.coverage
+coverage.xml
+.pytest_cache/
+test-results/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.*
