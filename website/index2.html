@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Константин Горбунов — QA Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./Константин Горбунов — QA Engineer_files/css2" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A0A0F;
+      --surface: #111118;
+      --card:    #13131C;
+      --card2:   #16161F;
+      --border:  #1E1E2E;
+      --border2: #2A2A3C;
+      --accent:  #00D4AA;
+      --accent2: #7B61FF;
+      --warn:    #F59E0B;
+      --text:    #E8E8F0;
+      --muted:   #6B7280;
+      --label:   #9CA3AF;
+      --mono:    'JetBrains Mono', monospace;
+      --sans:    'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10, 10, 15, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    section {
+      padding: 96px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-of-type { border-bottom: none; }
+
+    /* ── SECTION HEADER ── */
+    .section-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 40px;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 1px solid var(--border);
+      padding: 120px 0 80px;
+    }
+    .hero-status {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-status::before {
+      content: '';
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.35; transform: scale(0.75); }
+    }
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .hero-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 4px;
+      background: var(--card);
+      border: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-photo-placeholder {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--border2);
+      text-align: center;
+      padding: 10px;
+      line-height: 1.7;
+    }
+    .hero-text { flex: 1; min-width: 260px; }
+    .hero-name {
+      font-family: var(--mono);
+      font-size: clamp(34px, 6.5vw, 68px);
+      font-weight: 700;
+      line-height: 1.04;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .hero-name span { color: var(--accent); }
+    .hero-role {
+      font-family: var(--mono);
+      font-size: clamp(13px, 1.8vw, 16px);
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 11px 22px;
+      border-radius: 3px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s;
+      border: 1px solid transparent;
+      display: inline-block;
+    }
+    .btn-primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+    .btn-ghost { background: transparent; color: var(--label); border-color: var(--border2); }
+    .btn-ghost:hover { border-color: var(--label); color: var(--text); }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--label);
+      font-size: 15px;
+      margin-bottom: 18px;
+      line-height: 1.85;
+    }
+    .about-text p strong { color: var(--text); font-weight: 500; }
+    .about-meta { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+    .meta-row {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .meta-row:last-child { border-bottom: none; }
+    .meta-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .meta-value {
+      font-size: 13px;
+      color: var(--text);
+    }
+    .meta-value a { color: var(--accent); text-decoration: none; }
+    .meta-value a:hover { text-decoration: underline; }
+
+    /* ── EXPERIENCE ── */
+    .exp-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+    .exp-item {
+      padding: 28px 32px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+    }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-role {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .exp-company {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .exp-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .exp-desc ul { padding-left: 0; list-style: none; }
+    .exp-desc li { display: flex; gap: 8px; margin-bottom: 5px; }
+    .exp-desc li::before { content: '—'; color: var(--border2); flex-shrink: 0; }
+    .exp-period {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      text-align: right;
+    }
+    .exp-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 2px;
+      background: rgba(123, 97, 255, 0.12);
+      color: var(--accent2);
+      border: 1px solid rgba(123, 97, 255, 0.22);
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    /* ── SKILLS ── */
+    .skills-block { margin-bottom: 40px; }
+    .skills-block-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .skill-group {
+      background: var(--card);
+      padding: 24px 26px;
+    }
+    .skill-group-title {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .skill-list li {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--label);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .skill-list li::before { content: '›'; color: var(--accent); font-size: 14px; line-height: 1; flex-shrink: 0; }
+
+    /* Techniques row */
+    .techniques-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .technique-group {
+      background: var(--card2);
+      padding: 22px 26px;
+    }
+    .technique-title {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .technique-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .technique-list li {
+      font-size: 13px;
+      color: var(--label);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.5;
+    }
+    .technique-list li::before { content: '·'; color: var(--accent2); flex-shrink: 0; margin-top: 1px; }
+
+    /* Tools matrix */
+    .tools-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .tools-table th {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 12px 20px;
+      text-align: left;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .tools-table td {
+      padding: 11px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      vertical-align: top;
+    }
+    .tools-table tr:last-child td { border-bottom: none; }
+    .tools-table tr:hover td { background: var(--card); }
+    .tools-table td:first-child {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      white-space: nowrap;
+      width: 220px;
+    }
+    .tools-table td:last-child { color: var(--label); }
+    .tool-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--label);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 2px 6px;
+      margin: 2px 3px 2px 0;
+    }
+
+    /* ── ARTIFACTS ── */
+    .artifacts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .artifact-card {
+      background: var(--card);
+      padding: 24px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .artifact-icon {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .artifact-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .artifact-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .artifact-link {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(0, 212, 170, 0.25);
+      padding: 7px 12px;
+      border-radius: 2px;
+      transition: all 0.18s;
+      display: inline-block;
+      align-self: flex-start;
+    }
+    .artifact-link:hover { background: rgba(0, 212, 170, 0.07); border-color: var(--accent); }
+    .artifact-link.placeholder {
+      color: var(--border2);
+      border-color: var(--border);
+      cursor: default;
+    }
+    .artifact-link.placeholder:hover { background: none; border-color: var(--border); }
+
+    /* ── PROJECTS ── */
+    .projects-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+
+    .project-card {
+      padding: 32px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .project-card:last-child { border-bottom: none; }
+    .project-card:hover { background: var(--card); }
+
+    .project-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .project-header-left { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .project-name {
+      font-family: var(--mono);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .project-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      background: rgba(0, 212, 170, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(0, 212, 170, 0.18);
+    }
+    .project-link-btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 7px 14px;
+      border: 1px solid rgba(0, 212, 170, 0.28);
+      border-radius: 2px;
+      transition: all 0.18s;
+      align-self: flex-start;
+      flex-shrink: 0;
+    }
+    .project-link-btn:hover { background: rgba(0, 212, 170, 0.07); border-color: var(--accent); }
+
+    /* QA breakdown inside project */
+    .project-qa {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+      border: 1px solid var(--border);
+      margin-bottom: 18px;
+      background: var(--border);
+    }
+    .qa-block {
+      background: var(--surface);
+      padding: 16px 18px;
+    }
+    .qa-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .qa-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .qa-list li {
+      font-size: 12px;
+      color: var(--label);
+      display: flex;
+      gap: 7px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .qa-list li::before { content: '—'; color: var(--border2); flex-shrink: 0; }
+
+    .bug-highlight {
+      background: rgba(245, 158, 11, 0.05);
+      border: 1px solid rgba(245, 158, 11, 0.15);
+      border-radius: 2px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+    }
+    .bug-highlight-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--warn);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .bug-highlight ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .bug-highlight li {
+      font-size: 12px;
+      color: var(--label);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .bug-highlight li::before { content: '⚠'; color: var(--warn); font-size: 10px; flex-shrink: 0; margin-top: 2px; }
+
+    .project-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      padding: 3px 7px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+    }
+
+    /* ── CONTACT ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .contact-intro {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 0;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-type {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      min-width: 76px;
+      flex-shrink: 0;
+    }
+    .contact-value {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--label);
+      text-decoration: none;
+      transition: color 0.2s;
+      word-break: break-all;
+    }
+    a.contact-value { color: var(--accent); }
+    a.contact-value:hover { text-decoration: underline; }
+    .contact-ph { color: var(--border2); }
+
+    /* ── FOOTER ── */
+    footer { padding: 32px 0; }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-copy { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+    .footer-copy span { color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { gap: 18px; }
+      .container { padding: 0 20px; }
+      section { padding: 64px 0; }
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero-top { flex-direction: column; gap: 24px; }
+      .exp-item { grid-template-columns: 1fr; }
+      .exp-period { text-align: left; }
+      .tools-table td:first-child { width: auto; white-space: normal; }
+    }
+    @media (max-width: 520px) {
+      .nav-links { display: none; }
+      .hero-name { font-size: 32px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-status::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">$ gorbunov.con</span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#artifacts">Artifacts</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+  <div class="container">
+    
+    <!-- Статус -->
+    <div class="hero-status">открыт к предложениям — remote / hybrid</div>
+
+    <!-- Основной блок: фото + текст -->
+    <div class="hero-top">
+      
+      <!-- ФОТО -->
+      <div class="hero-photo">
+        <img src="./assets/IMG_6397.jpg" alt="Константин Горбунов" />
+      </div>
+
+      <!-- ТЕКСТ + КНОПКИ -->
+      <div class="hero-text">
+        <h1 class="hero-name">Константин<br><span>Горбунов</span></h1>
+        <p class="hero-role">QA Engineer · Manual & Automation · API · SQL</p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">Проекты</a>
+          <a href="#contact" class="btn btn-ghost">Связаться</a>
+        </div>
+      </div>
+
+    </div>
+    <!-- /hero-top -->
+
+  </div>
+  <!-- /container -->
+</section>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<section id="about">
+  <div class="container">
+    <p class="section-eyebrow">// 01 — about</p>
+    <h2 class="section-title">Обо мне</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          Я пришёл в тестирование через практику. Сначала была автоматизация — но не в коде,
+          а в звуке: работал на студии и в театре, выстраивал и оптимизировал технические процессы.
+          <strong>Автоматизация и оптимизация — то, что мне интересно само по себе.</strong>
+        </p>
+        <p>
+          Затем захотел создавать цифровые продукты: торговых ботов, платёжные сервисы, арбитражные системы.
+          Начал вайбкодить с помощью нейросетей — и столкнулся с реальностью:
+          <strong>код, написанный AI, нужно проверять, чистить, доводить до рабочего состояния.</strong>
+          Так я начал тестировать — сначала свои сервисы, потом целенаправленно.
+        </p>
+        <p>
+          Убеждён: с развитием AI роль разработчика трансформируется —
+          <strong>производство кода уходит в нейросети, а контроль качества остаётся за человеком.</strong>
+          За тестированием будущее. Я хочу быть там, где это происходит.
+        </p>
+        <p>
+          Все мои проекты — это реальные рабочие системы.
+          Я не просто запускал код: я тестировал API, искал баги в логике, проверял крайние случаи,
+          писал чек-листы и фиксировал дефекты. Коммерческого опыта пока нет —
+          но есть реальная практика и понимание того, зачем нужно тестирование.
+        </p>
+      </div>
+      <div class="about-meta">
+        <div class="meta-row">
+          <span class="meta-label">Местонахождение</span>
+          <span class="meta-value">// Санкт-Петербург, Россия</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Опыт в QA</span>
+          <span class="meta-value">// ~1 год, пет-проекты<span style="color:var(--border2)"></span></span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Формат</span>
+          <span class="meta-value">// Remote / Hybrid</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Занятость</span>
+          <span class="meta-value">// Full-time / Part-time</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Английский</span>
+          <span class="meta-value">// C1 <span style="color:var(--border2)"></span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">CV</span>
+          <span class="meta-value"><a href="#" target="_blank">Скачать резюме ↗</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ EXPERIENCE ═══════════════ -->
+<section id="experience">
+  <div class="container">
+    <p class="section-eyebrow">// 02 — experience</p>
+    <h2 class="section-title">Опыт</h2>
+    <div class="exp-list">
+
+      <div class="exp-item">
+        <div>
+          <div class="exp-role">QA Engineer</div>
+          <div class="exp-company">Freelance / Пет-проекты</div>
+          <div class="exp-desc">
+            <ul>
+              <li>Тестировал REST API собственных сервисов через Postman: проверка эндпоинтов, статус-коды, обработка ошибок, граничные значения</li>
+              <li>Писал тест-кейсы и чек-листы для 6 проектов; фиксировал баг-репорты по стандарту (Steps / Expected / Actual / Severity)</li>
+              <li>Проводил функциональное, интеграционное и регрессионное тестирование после каждого изменения в коде</li>
+              <li>Тестировал взаимодействие сервисов с базами данных: корректность записи/чтения, инвалидация кеша Redis</li>
+              <li>Валидировал бизнес-логику торговых ботов: правильность расчётов ATR, корректность срабатывания стоп-ордеров</li>
+              <li>Работал с Nginx, Linux CLI, деплоем на VPS — понимаю инфраструктуру продукта</li>
+            </ul>
+          </div>
+          <span class="exp-badge">без коммерческого опыта · пет-проекты</span>
+        </div>
+        <div>
+          <div class="exp-period">// 2025 — н.в.</div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div>
+          <div class="exp-role">Технический специалист / Автоматизация</div>
+          <div class="exp-company">Студия звукозаписи / Театр</div>
+          <div class="exp-desc">
+            <ul>
+              <li>Настройка и автоматизация технических процессов на студии и в театре</li>
+              <li>Оптимизация рабочих процессов: сокращение времени на рутинные операции</li>
+              <li>Техническое сопровождение мероприятий, работа с оборудованием под нагрузкой</li>
+              <li>Выявление и устранение технических сбоев в режиме реального времени — навык, напрямую применимый в тестировании</li>
+            </ul>
+          </div>
+          <span class="exp-badge">до IT</span>
+        </div>
+        <div>
+          <div class="exp-period">// 2019–2025<span style="color:var(--border2)"></span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SKILLS ═══════════════ -->
+<section id="skills">
+  <div class="container">
+    <p class="section-eyebrow">// 03 — skills</p>
+    <h2 class="section-title">Навыки</h2>
+
+    <!-- Техники тест-дизайна -->
+    <p class="skills-block-title">Тест-дизайн</p>
+    <div class="techniques-grid" style="margin-bottom: 40px;">
+      <div class="technique-group">
+        <div class="technique-title">Техники</div>
+        <ul class="technique-list">
+          <li>Классы эквивалентности</li>
+          <li>Граничные значения</li>
+          <li>Попарное тестирование (Pairwise)</li>
+          <li>Таблицы решений</li>
+          <li>Тестирование переходов состояний</li>
+          <li>Доменный анализ</li>
+        </ul>
+      </div>
+      <div class="technique-group">
+        <div class="technique-title">Типы тестирования</div>
+        <ul class="technique-list">
+          <li>Функциональное / smoke / sanity</li>
+          <li>Регрессионное</li>
+          <li>Интеграционное</li>
+          <li>Системное / приёмочное</li>
+          <li>Исследовательское (exploratory)</li>
+          <li>API-тестирование</li>
+        </ul>
+      </div>
+      <div class="technique-group">
+        <div class="technique-title">Процессы</div>
+        <ul class="technique-list">
+          <li>Agile / Scrum / Kanban</li>
+          <li>Работа с беклогом и спринтами</li>
+          <li>Составление тест-планов</li>
+          <li>Bug life cycle</li>
+          <li>Приоритизация дефектов (Severity / Priority)</li>
+          <li>Работа с требованиями</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Инструменты -->
+    <p class="skills-block-title">Инструменты</p>
+    <table class="tools-table">
+      <thead>
+        <tr>
+          <th>Направление</th>
+          <th>Инструменты</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Управление тестированием</td>
+          <td>
+            <span class="tool-tag">Jira</span>
+            <span class="tool-tag">Trello</span>
+            <span class="tool-tag">Confluence</span>
+            <span class="tool-tag">Notion</span>
+            <span class="tool-tag">TestRail</span>
+            <span class="tool-tag">Qase</span>
+          </td>
+        </tr>
+        <tr>
+          <td>API-тестирование</td>
+          <td>
+            <span class="tool-tag">Postman</span>
+            <span class="tool-tag">Swagger / OpenAPI</span>
+            <span class="tool-tag">SoapUI</span>
+            <span class="tool-tag">Charles</span>
+            <span class="tool-tag">Fiddler</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Автоматизация</td>
+          <td>
+            <span class="tool-tag">Pytest</span>
+            <span class="tool-tag">RestAssured</span>
+            <span class="tool-tag">Selenium WebDriver</span>
+            <span class="tool-tag">Playwright</span>
+            <span class="tool-tag">Allure</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Нагрузочное тестирование</td>
+          <td>
+            <span class="tool-tag">JMeter</span>
+            <span class="tool-tag">k6</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Базы данных</td>
+          <td>
+            <span class="tool-tag">PostgreSQL</span>
+            <span class="tool-tag">MySQL</span>
+            <span class="tool-tag">Redis</span>
+            <span class="tool-tag">SQL</span>
+            <span class="tool-tag">DBeaver</span>
+            <span class="tool-tag">DataGrip</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Безопасность</td>
+          <td>
+            <span class="tool-tag">OWASP ZAP</span>
+            <span class="tool-tag">Burp Suite (базово)</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Мониторинг и логи</td>
+          <td>
+            <span class="tool-tag">Kibana</span>
+            <span class="tool-tag">Grafana</span>
+            <span class="tool-tag">Sentry</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Окружение и деплой</td>
+          <td>
+            <span class="tool-tag">Git / GitHub</span>
+            <span class="tool-tag">Linux / CLI</span>
+            <span class="tool-tag">Nginx</span>
+            <span class="tool-tag">VS Code</span>
+            <span class="tool-tag">IntelliJ IDEA</span>
+            <span class="tool-tag">Maven</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Языки / скрипты</td>
+          <td>
+            <span class="tool-tag">Python</span>
+            <span class="tool-tag">Java (базовый)</span>
+            <span class="tool-tag">SQL</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Прочее</td>
+          <td>
+            <span class="tool-tag">N8n</span>
+            <span class="tool-tag">Cloudflare</span>
+            <span class="tool-tag">Telegram Bot API</span>
+	    <span class="tool-tag">Claude Code </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ ARTIFACTS ═══════════════ -->
+<section id="artifacts">
+  <div class="container">
+    <p class="section-eyebrow">// 04 — artifacts</p>
+    <h2 class="section-title">Тестовые артефакты</h2>
+    <div class="artifacts-grid">
+
+      <div class="artifact-card">
+        <div class="artifact-icon">📋 тест-кейсы</div>
+        <div class="artifact-title">Test Cases</div>
+        <div class="artifact-desc">
+          Тест-кейсы для API и UI по проектам: платёжный сервис, арбитражный бот,
+          торговые боты BingX. Формат: Steps / Expected / Actual.
+        </div>
+        <!-- Замени href на ссылку Яндекс Диска / Google Sheets / Notion -->
+        <a href="#" class="artifact-link placeholder">// добавь ссылку ↗</a>
+      </div>
+
+      <div class="artifact-card">
+        <div class="artifact-icon">🐛 баг-репорты</div>
+        <div class="artifact-title">Bug Reports</div>
+        <div class="artifact-desc">
+          Задокументированные баги с шагами воспроизведения, severity/priority,
+          скриншотами. Чувствительные данные замазаны.
+        </div>
+        <a href="#" class="artifact-link placeholder">// добавь ссылку ↗</a>
+      </div>
+
+      <div class="artifact-card">
+        <div class="artifact-icon">✅ чек-листы</div>
+        <div class="artifact-title">Check-lists</div>
+        <div class="artifact-desc">
+          Чек-листы для регрессионного тестирования: API-эндпоинты,
+          валидация бизнес-логики, пограничные случаи.
+        </div>
+        <a href="#" class="artifact-link placeholder">// добавь ссылку ↗</a>
+      </div>
+
+      <div class="artifact-card">
+        <div class="artifact-icon">🗺 mind-карты</div>
+        <div class="artifact-title">Mind Maps</div>
+        <div class="artifact-desc">
+          Покрытие требований в формате mind-карт: декомпозиция функционала,
+          граничные случаи, негативные сценарии.
+        </div>
+        <a href="#" class="artifact-link placeholder">// добавь ссылку ↗</a>
+      </div>
+
+      <div class="artifact-card">
+        <div class="artifact-icon">⚙ автотесты</div>
+        <div class="artifact-title">Autotests</div>
+        <div class="artifact-desc">
+          Примеры автотестов: Python + Pytest для API, Java + RestAssured.
+          Ссылка на GitHub с реальным кодом тестов.
+        </div>
+        <!-- Замени на ссылку GitHub -->
+        <a href="https://github.com/pxrpxrx/qa-portfolio" class="artifact-link" target="_blank" rel="noopener">// GitHub ↗</a>
+      </div>
+
+      <div class="artifact-card">
+        <div class="artifact-icon">📄 тест-план</div>
+        <div class="artifact-title">Test Plan</div>
+        <div class="artifact-desc">
+          Пример тест-плана для одного из проектов: scope, критерии входа/выхода,
+          стратегия, риски, график.
+        </div>
+        <a href="#" class="artifact-link placeholder">// добавь ссылку ↗</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PROJECTS ═══════════════ -->
+<section id="projects">
+  <div class="container">
+    <p class="section-eyebrow">// 05 — projects</p>
+    <h2 class="section-title">Проекты</h2>
+    <div class="projects-list">
+
+      <!-- ПРОЕКТ 1: T-Bank QR Payment -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-header-left">
+            <span class="project-name">T-Bank QR Payment Service</span>
+            <span class="project-badge">Java · Redis · REST API</span>
+          </div>
+          <a href="https://github.com/pxrpxrx/qa-portfolio/tree/main/tbank_qrcode_service" class="project-link-btn" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="project-qa">
+          <div class="qa-block">
+            <div class="qa-label">Что тестировал</div>
+            <ul class="qa-list">
+              <li>UI: форма генерации QR, валидация полей, маски ввода, edge cases</li>
+              <li>API: все эндпоинты (GET / POST / PUT / DELETE), статус-коды, тело ответа, обработка ошибок</li>
+              <li>Интеграционное: взаимодействие сервиса с Redis (кеш), корректность записи / чтения</li>
+              <li>Регрессия после каждого изменения в бизнес-логике</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Инструменты</div>
+            <ul class="qa-list">
+              <li>Postman — коллекции запросов, переменные окружения, assertions</li>
+              <li>DBeaver — проверка записей в БД до и после операций</li>
+              <li>Charles — перехват и анализ трафика</li>
+              <li>Ручной баг-трекинг в Notion / Trello</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Автотесты</div>
+            <ul class="qa-list">
+              <li>Java + RestAssured: базовые тесты на API-эндпоинты</li>
+              <li>Проверка статус-кодов и схемы JSON-ответа</li>
+            </ul>
+          </div>
+        </div>
+        <div class="bug-highlight">
+          <div class="bug-highlight-title">Найденные баги (примеры)</div>
+          <ul>
+            <li>При невалидном номере карты API возвращал 500 вместо 400 Bad Request</li>
+            <li>Кеш Redis не инвалидировался после обновления статуса платежа — старые данные отдавались клиенту</li>
+          </ul>
+        </div>
+        <div class="project-tags">
+          <span class="tag">Java</span><span class="tag">Maven</span><span class="tag">Redis</span>
+          <span class="tag">REST API</span><span class="tag">Postman</span><span class="tag">DBeaver</span>
+          <span class="tag">RestAssured</span><span class="tag">IntelliJ IDEA</span>
+        </div>
+      </div>
+
+      <!-- ПРОЕКТ 2: Arbitrage Spread Bot -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-header-left">
+            <span class="project-name">Arbitrage Spread Bot</span>
+            <span class="project-badge">Java · PostgreSQL · N8n</span>
+          </div>
+          <a href="https://github.com/pxrpxrx/qa-portfolio/tree/main/arbit_bot" class="project-link-btn" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="project-qa">
+          <div class="qa-block">
+            <div class="qa-label">Что тестировал</div>
+            <ul class="qa-list">
+              <li>API нескольких бирж: корректность получения данных о ценах и объёмах</li>
+              <li>Логика валидации спреда: проверка пороговых значений, ложные срабатывания</li>
+              <li>Доставку Telegram-сигналов: полнота данных, задержки, дубликаты</li>
+              <li>Кастомизацию параметров: выбор бирж, настройка спреда — позитивные и негативные сценарии</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Инструменты</div>
+            <ul class="qa-list">
+              <li>Postman — тестирование биржевых API-эндпоинтов</li>
+              <li>PostgreSQL / DBeaver — проверка данных в БД</li>
+              <li>N8n — тестирование automation workflow</li>
+              <li>Cloudflare — проверка проксирования</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Типы тестирования</div>
+            <ul class="qa-list">
+              <li>Функциональное, интеграционное</li>
+              <li>Граничные значения (spread threshold)</li>
+              <li>Исследовательское</li>
+            </ul>
+          </div>
+        </div>
+        <div class="bug-highlight">
+          <div class="bug-highlight-title">Найденные баги (примеры)</div>
+          <ul>
+            <li>При нулевом объёме ордера бот не отфильтровывал ложный сигнал — отправлял в Telegram невалидную сделку</li>
+            <li>Дублирование Telegram-уведомлений при кратковременных сетевых разрывах</li>
+          </ul>
+        </div>
+        <div class="project-tags">
+          <span class="tag">Java</span><span class="tag">PostgreSQL</span><span class="tag">N8n</span>
+          <span class="tag">Cloudflare</span><span class="tag">Postman</span><span class="tag">Telegram API</span>
+        </div>
+      </div>
+
+      <!-- ПРОЕКТ 3: Trading Signal Bot -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-header-left">
+            <span class="project-name">Trading Signal Bot (BingX)</span>
+            <span class="project-badge">Python · BingX API</span>
+          </div>
+          <a href="https://github.com/pxrpxrx/qa-portfolio/tree/main/trader_assistant_bot" class="project-link-btn" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="project-qa">
+          <div class="qa-block">
+            <div class="qa-label">Что тестировал</div>
+            <ul class="qa-list">
+              <li>Корректность генерируемых сигналов: логика условий входа / выхода</li>
+              <li>Взаимодействие с приватным API BingX: аутентификация, подпись запросов, ответы</li>
+              <li>Обработка ошибок API: rate limits, неверные параметры, нет соединения</li>
+              <li>Smoke-тест перед каждым запуском в прод</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Инструменты</div>
+            <ul class="qa-list">
+              <li>Postman — ручная проверка эндпоинтов BingX</li>
+              <li>VS Code + логирование — отладка и анализ поведения</li>
+              <li>Python (unittest) — базовые юнит-тесты логики сигналов</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Типы тестирования</div>
+            <ul class="qa-list">
+              <li>Функциональное, smoke</li>
+              <li>Граничные значения параметров</li>
+              <li>Негативные сценарии (API ошибки)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="bug-highlight">
+          <div class="bug-highlight-title">Найденные баги (примеры)</div>
+          <ul>
+            <li>При достижении rate limit API бот падал с необработанным исключением вместо graceful retry</li>
+            <li>Неверный расчёт объёма позиции при нестандартном leverage — ордер отклонялся биржей</li>
+          </ul>
+        </div>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">BingX API</span>
+          <span class="tag">REST</span><span class="tag">Postman</span><span class="tag">VS Code</span>
+        </div>
+      </div>
+
+      <!-- ПРОЕКТ 4: ATR Stop & Trailing Bot -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-header-left">
+            <span class="project-name">ATR Stop &amp; Trailing Bot</span>
+            <span class="project-badge">Python · BingX API</span>
+          </div>
+          <a href="https://github.com/pxrpxrx/qa-portfolio/tree/main/fractal_trader_bot" class="project-link-btn" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="project-qa">
+          <div class="qa-block">
+            <div class="qa-label">Что тестировал</div>
+            <ul class="qa-list">
+              <li>Расчёт ATR: точность значений при разных периодах и таймфреймах</li>
+              <li>Трейлинг-стоп по фракталам Уильямса: корректность определения фракталов, логика обновления стопа</li>
+              <li>Выставление ордеров через API: параметры, подтверждение исполнения</li>
+              <li>Граничные значения: минимальный размер позиции, нулевой ATR</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Инструменты</div>
+            <ul class="qa-list">
+              <li>Postman — проверка ордер-эндпоинтов BingX</li>
+              <li>Python scripts — скрипты для валидации расчётов ATR</li>
+              <li>VS Code + логи — пошаговый разбор поведения</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Типы тестирования</div>
+            <ul class="qa-list">
+              <li>Функциональное, граничные значения</li>
+              <li>Интеграционное (бот ↔ биржа)</li>
+              <li>Исследовательское</li>
+            </ul>
+          </div>
+        </div>
+        <div class="bug-highlight">
+          <div class="bug-highlight-title">Найденные баги (примеры)</div>
+          <ul>
+            <li>Трейлинг-стоп не обновлялся при формировании нового фрактала — оставался на уровне первоначального</li>
+            <li>При ATR близком к нулю (флэт рынок) расчёт стопа давал деление на ноль — краш бота</li>
+          </ul>
+        </div>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">BingX API</span>
+          <span class="tag">ATR</span><span class="tag">Fractals</span><span class="tag">VS Code</span>
+        </div>
+      </div>
+
+      <!-- ПРОЕКТ 5: Crypto Exchange Bot -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-header-left">
+            <span class="project-name">Crypto Exchange Telegram Bot</span>
+            <span class="project-badge">Python · SQL</span>
+          </div>
+          <a href="https://github.com/pxrpxrx/qa-portfolio/tree/main/exchanger_bot" class="project-link-btn" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="project-qa">
+          <div class="qa-block">
+            <div class="qa-label">Что тестировал</div>
+            <ul class="qa-list">
+              <li>UX-флоу обмена: команды, ветки диалога, обработка некорректного ввода</li>
+              <li>SQL: корректность записи транзакций, целостность данных, дубликаты</li>
+              <li>Граничные значения: минимальная / максимальная сумма обмена</li>
+              <li>Негативные сценарии: недостаточный баланс, неизвестная пара</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Инструменты</div>
+            <ul class="qa-list">
+              <li>SQL-запросы — проверка состояния БД до / после</li>
+              <li>Ручное тестирование Telegram UI</li>
+              <li>Баг-трекинг в Notion</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Типы тестирования</div>
+            <ul class="qa-list">
+              <li>Функциональное, граничные значения</li>
+              <li>Негативное, smoke</li>
+            </ul>
+          </div>
+        </div>
+        <div class="bug-highlight">
+          <div class="bug-highlight-title">Найденные баги (примеры)</div>
+          <ul>
+            <li>При одновременных запросах от двух пользователей одна транзакция записывалась дважды (race condition)</li>
+            <li>Бот не обрабатывал команду /start повторно после завершения сделки — зависал в неверном состоянии</li>
+          </ul>
+        </div>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Telegram Bot API</span>
+        </div>
+      </div>
+
+      <!-- ПРОЕКТ 6: Arbitrage Bot Landing -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-header-left">
+            <span class="project-name">Arbitrage Bot Landing Page</span>
+            <span class="project-badge">HTML · Nginx · Linux</span>
+          </div>
+          <a href="https://github.com/pxrpxrx/qa-portfolio/tree/main/arbit_website" class="project-link-btn" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="project-qa">
+          <div class="qa-block">
+            <div class="qa-label">Что тестировал</div>
+            <ul class="qa-list">
+              <li>Кроссбраузерность: Chrome, Firefox, Safari — визуальные баги, отступы</li>
+              <li>Адаптивность: desktop / tablet / mobile breakpoints</li>
+              <li>Деплой и доступность сайта через Nginx на VPS</li>
+              <li>Корректность HTTPS, редиректы HTTP → HTTPS</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Инструменты</div>
+            <ul class="qa-list">
+              <li>DevTools — эмуляция устройств, сетевые запросы</li>
+              <li>Linux CLI — проверка конфига Nginx, логи сервера</li>
+              <li>Ручное визуальное тестирование</li>
+            </ul>
+          </div>
+          <div class="qa-block">
+            <div class="qa-label">Типы тестирования</div>
+            <ul class="qa-list">
+              <li>UI / визуальное</li>
+              <li>Кроссбраузерное</li>
+              <li>Smoke (доступность после деплоя)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="bug-highlight">
+          <div class="bug-highlight-title">Найденные баги (примеры)</div>
+          <ul>
+            <li>На Safari кнопка CTA выходила за границы блока на мобильном viewport</li>
+            <li>После смены SSL-сертификата HTTP не редиректил на HTTPS — нужна была правка конфига Nginx</li>
+          </ul>
+        </div>
+        <div class="project-tags">
+          <span class="tag">HTML / CSS</span><span class="tag">Nginx</span>
+          <span class="tag">Linux</span><span class="tag">VPS</span><span class="tag">DevTools</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section id="contact">
+  <div class="container">
+    <p class="section-eyebrow">// 06 — contact</p>
+    <h2 class="section-title">Связаться</h2>
+    <div class="contact-grid">
+      <div>
+        <p class="contact-intro">
+          Ищу первую коммерческую позицию QA Engineer.
+          Готов к ручному и автоматизированному тестированию,
+          работе в Agile-команде, remote или гибриду.
+          Пишите напрямую — отвечаю быстро.
+        </p>
+      </div>
+      <div class="contact-links">
+        <div class="contact-row">
+          <span class="contact-type">Telegram</span>
+          <a href="https://t.me/%D0%A2%D0%92%D0%9E%D0%99_TELEGRAM" class="contact-value" target="_blank" rel="noopener">@hubba_bubbs</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-type">Email</span>
+          <a href="mailto:your@email.com" class="contact-value">pxrpxrx@gmail.com</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-type">GitHub</span>
+          <a href="https://github.com/pxrpxrx" class="contact-value" target="_blank" rel="noopener">github.com/pxrpxrx</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-type">LinkedIn</span>
+          <span class="contact-value contact-ph">// не указан</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-type">hh.ru</span>
+          <span class="contact-value contact-ph">// ссылка на резюме</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-copy">© 2026 <span>Константин Горбунов</span>. QA Engineer.</span>
+      <span class="footer-copy" style="color:var(--border2)">Manual · Automation · API · SQL</span>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>
