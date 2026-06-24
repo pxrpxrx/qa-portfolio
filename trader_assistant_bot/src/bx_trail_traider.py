@@ -1,4 +1,4 @@
-# bx_monitor.py - ФИНАЛЬНАЯ ВЕРСИЯ
+# bx_trail_traider.py - ФИНАЛЬНАЯ ВЕРСИЯ
 import time
 import json
 import os

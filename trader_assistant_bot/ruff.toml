@@ -1,4 +1,9 @@
-target-version = "py314"
-line-length = 120
-select = ["E", "F", "W", "I"]
+target-version = "py310"
+line-length = 100
+
+[lint]
+select = ["E", "F", "I", "W", "UP"]
 ignore = ["E501"]
+
+[format]
+quote-style = "double"

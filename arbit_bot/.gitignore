@@ -10,6 +10,14 @@
 *.crt
 credentials.json
 
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Allure
+allure-results/
+
 # IDE
 .vscode/
 .idea/

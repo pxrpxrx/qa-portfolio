@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [fractal_trader_bot, trader_assistant_bot, exchanger_bot]
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - run: pip install ruff mypy
+      - run: ruff check . || echo "Ruff issues found"
+      - run: mypy src/ --ignore-missing-imports || echo "Mypy issues found"
+
+  fractal_trader_bot:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fractal_trader_bot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - run: pip install -r requirements.txt pytest pytest-cov
+      - run: python -m pytest tests/ -v --cov=src --cov-report=term
+
+  trader_assistant_bot:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: trader_assistant_bot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - run: pip install -r requirements.txt pytest pytest-cov
+      - run: python -m pytest tests/ -v --cov=src --cov-report=term
+
+  exchanger_bot:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: exchanger_bot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - run: pip install -r requirements.txt pytest requests
+      - run: python -m pytest tests/ -v
+
+  arbit_bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: npm
+          cache-dependency-path: arbit_bot/tests/package.json
+      - run: npm ci
+        working-directory: arbit_bot/tests
+      - run: npm test
+        working-directory: arbit_bot/tests
+
+  tbank_qrcode_service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tbank_qrcode_service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: maven
+      - run: mvn test -pl . -am

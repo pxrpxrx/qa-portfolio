@@ -39,8 +39,8 @@ crypto-exchange-bot/
 ├── LICENSE
 ├── docs/
 │ ├── test-plan.md
-│ ├── regression-checklist.md
-│ ├── database-schema.md
+│ ├── checklists/regression-checklist.md
+│ ├── database-scheme.md
 │ ├── api-documentation.md
 │ ├── dbeaver-guide.md
 │ ├── postman-collection.json
@@ -63,9 +63,8 @@ crypto-exchange-bot/
 ├── test_api.py
 ├── test_database.py
 ├── test_bot_logic.py
-├── conftest.py
 ├── pytest.ini
-└── requirements-test.txt
+└── requirements.txt
 
 ---
 
@@ -137,7 +136,7 @@ users — пользователи и их состояния
 orders — заявки на обмен
 cached_rates — кэш курсов
 messages_to_send — отложенные сообщения
-Подробнее — в docs/database-schema.md
+Подробнее — в docs/database-scheme.md
 
 ### Проект покрыт тестовой документацией и автотестами:
 Тест-план	Стратегия тестирования

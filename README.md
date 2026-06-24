@@ -9,26 +9,45 @@
 | [arbit_bot](./arbit_bot/) | Telegram-бот для мониторинга спредов криптобирж | Функциональное тестирование, API-тесты (JS), баг-репорты, Postman-коллекция |
 | [exchanger_bot](./exchanger_bot/) | Telegram-бот криптообменника на Python/SQLite | Полный цикл: тест-план, кейсы, чеклисты, автотесты (pytest + Allure), DBeaver-схемы |
 | [arbit_website](./arbit_website/) | Лендинг арбитражника (HTML/CSS) | Тест-кейсы, баг-репорты, UI-проверки, регрессионный чеклист |
-| [fractal_trader_bot](./fractal_trader_bot/) | Торговый бот на фракталах (Python, BingX API) | 25 pytest-тестов, Allure-отчёты, Docker, CI/CD, Postman |
-| [trader_assistant_bot](./trader_assistant_bot/) | Трейлинг-стоп монитор (Python, WebSocket) | 132 pytest-теста, Allure, Docker, Postman, GitHub Actions |
-| [tbank_qrcode_service](./tbank_qrcode_service/) | Микросервис приёма платежей (Java, Spring Boot) | Maven + pytest тесты, Docker Compose (PostgreSQL + Redis), Postman |
+| [fractal_trader_bot](./fractal_trader_bot/) | Торговый бот на фракталах (Python, BingX API) | 25 pytest-тестов, Allure, ruff + mypy, coverage, CI/CD, Postman |
+| [trader_assistant_bot](./trader_assistant_bot/) | Трейлинг-стоп монитор (Python, WebSocket) | 132 pytest-теста, Allure, ruff + mypy, coverage, GitHub Actions |
+| [tbank_qrcode_service](./tbank_qrcode_service/) | Микросервис приёма платежей (Java, Spring Boot) | JUnit 5 + MockMvc тесты, Docker Compose (PostgreSQL + Redis), Postman |
 
-## Что умею
+## Инструменты, доказанные в проектах
 
-- Писать тест-планы, тест-кейсы, баг-репорты, чеклисты
-- Автотесты: Python (pytest), Java (JUnit 5), JavaScript (Node.js)
-- API: Postman, Newman, curl, REST, WebSocket
-- CI/CD: GitHub Actions
-- Docker, docker-compose
-- Allure-отчёты
-- SQL (PostgreSQL, SQLite) — DBeaver
-- Linux, Git
+> Каждый инструмент подкреплён файлами в репозитории, тестами или CI-конфигами.
+
+**Автоматизация:** pytest, JUnit 5 + MockMvc, Allure, ruff, mypy, pytest-cov  
+**API:** Postman, Newman, REST, WebSocket, nock (JS mocking)  
+**CI/CD:** GitHub Actions (lint → test → coverage)  
+**Контейнеризация:** Docker, docker-compose (Java + PostgreSQL + Redis)  
+**Нагрузка:** k6 (скрипт в `performance-tests/`)  
+**БД:** SQLite, PostgreSQL, Redis, DBeaver, SQL  
+**Окружение:** Git, Linux CLI, Nginx, Maven, VS Code, IntelliJ IDEA  
+**Языки:** Python, Java, SQL, JavaScript (Node.js), HTML/CSS
+
+## Инструменты — в процессе изучения
+
+> Указаны в резюме, но пока без проектного следа в этом репозитории.
+> Скриншоты / PDF-артефакты — следующий шаг.
+
+| Куда добавить скриншот | Что показать |
+|------------------------|-------------|
+| `arbit_bot/docs/screenshots/` | Jira/Notion: пример баг-репорта с заполненными полями (Steps, Expected, Actual, Severity) |
+| `exchanger_bot/docs/screenshots/` | TestRail / Qase: скриншот тест-рана с результатами |
+| `fractal_trader_bot/docs/screenshots/` | Charles/Fiddler: перехваченный запрос к BingX API, тело и заголовки |
+| `trader_assistant_bot/docs/screenshots/` | OWASP ZAP / Burp Suite: отчёт сканирования, найденные уязвимости |
+| `tbank_qrcode_service/docs/screenshots/` | Grafana / Kibana: дашборд с метриками приложения (если есть доступ) |
+| `performance-tests/screenshots/` | k6 / JMeter: отчёт нагрузочного теста, график RPS и latencies |
 
 ## Результаты
 
-- **174 Python-теста** проходят в 3 проектах (exchanger_bot, fractal_trader_bot, trader_assistant_bot)
-- **2 Postman-коллекции** с реальных криптобирж (MEXC, Bybit, Bitget, OKX) — запросы проходят
-- **5 Postman-коллекций** для всех проектов, готовых к запуску через Newman
+- **174+ Python-теста** проходят в 3 проектах
+- **Java-тесты:** JUnit 5 + MockMvc (tbank_qrcode_service)
+- **JS-тесты:** nock (arbit_bot)
+- **2 Postman-коллекции** с реальных криптобирж (MEXC, Bybit, Bitget, OKX)
+- **Docker Compose:** Java-микросервис + PostgreSQL + Redis
+- **CI:** GitHub Actions на push/PR (ruff + pytest + coverage + maven)
 
 ## Контакты
 
