@@ -1,14 +1,14 @@
-name: Lint HTML/CSS
+name: Tests
 on: [push, pull_request]
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check HTML validity
-        uses: Cyb3r-Jak3/html5validator-action@v7.2
+      - uses: actions/setup-python@v5
         with:
-          root: arb-landing/
-      - name: Check CSS
-        run: |
-          echo "All files present:" && ls -la arb-landing/
+          python-version: "3.12"
+      - run: pip install -r tests/requirements-test.txt
+        working-directory: arbit_website
+      - run: python -m pytest tests/ -v
+        working-directory: arbit_website

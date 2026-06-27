@@ -8,9 +8,9 @@
 |--------|------|-----------|
 | [arbit_bot](./arbit_bot/) | Telegram-бот для мониторинга спредов криптобирж | Функциональное тестирование, API-тесты (JS), баг-репорты, Postman-коллекция |
 | [exchanger_bot](./exchanger_bot/) | Telegram-бот криптообменника на Python/SQLite | Полный цикл: тест-план, кейсы, чеклисты, автотесты (pytest + Allure), DBeaver-схемы |
-| [arbit_website](./arbit_website/) | Лендинг арбитражника (HTML/CSS) | Тест-кейсы, баг-репорты, UI-проверки, регрессионный чеклист |
+| [arbit_website](./arbit_website/) | Лендинг арбитражника (HTML/CSS) | HTML-валидация, тесты ссылок, проверка адаптивности (pytest + BeautifulSoup) |
 | [fractal_trader_bot](./fractal_trader_bot/) | Торговый бот на фракталах (Python, BingX API) | 25 pytest-тестов, Allure, ruff + mypy, coverage, CI/CD, Postman |
-| [trader_assistant_bot](./trader_assistant_bot/) | Трейлинг-стоп монитор (Python, WebSocket) | 132 pytest-теста, Allure, ruff + mypy, coverage, GitHub Actions |
+| [trader_assistant_bot](./trader_assistant_bot/) | Трейлинг-стоп монитор (Python, WebSocket) | 10 ключевых pytest-тестов (ATR, Risk Manager, Monitor, Trader), Allure, CI/CD |
 | [tbank_qrcode_service](./tbank_qrcode_service/) | Микросервис приёма платежей (Java, Spring Boot) | JUnit 5 + MockMvc тесты, Docker Compose (PostgreSQL + Redis), Postman |
 | [macro-dashboard](./macro-dashboard/) | Мульти-горизонтный макро-анализ (Java 17, FRED/Yahoo/Binance) | 64 JUnit 5 теста, AssertJ, Mockito, Allure, GitHub Actions CI |
 
@@ -43,14 +43,13 @@
 
 ## Результаты
 
-- **174+ Python-теста** проходят в 3 проектах
-- **64 Java-теста** (macro-dashboard): JUnit 5 + AssertJ + Mockito
-- **Java-тесты:** JUnit 5 + MockMvc (tbank_qrcode_service)
-- **JS-тесты:** nock (arbit_bot)
-- **2 Postman-коллекции** с реальных криптобирж (MEXC, Bybit, Bitget, OKX)
+- **46 Python-тестов** в 4 проектах (arbit_bot, exchanger_bot, fractal_trader_bot, trader_assistant_bot, arbit_website)
+- **85 Java-тестов** в 2 проектах (tbank_qrcode_service: 21, macro-dashboard: 64)
+- **Postman-коллекции** с реальных криптобирж (MEXC, Bybit, Bitget, OKX)
 - **Docker Compose:** Java-микросервис + PostgreSQL + Redis
-- **CI:** GitHub Actions на push/PR (ruff + pytest + coverage + maven)
+- **CI/CD:** GitHub Actions на push/PR (pytest + JUnit + Allure)
 - **Нагрузка:** k6 (скрипт в `tbank_qrcode_service/performance-tests/`)
+- **HTML-тесты:** BeautifulSoup + pytest для статических сайтов
 
 ## Контакты
 

@@ -1,106 +1,96 @@
+"""
+Тесты бизнес-логики бота.
+Импортирует реальные функции из client_bot.py
+"""
 import pytest
+import sqlite3
 from unittest.mock import patch, MagicMock
+from pathlib import Path
+from client_bot import get_rate, create_order, get_main_keyboard, get_buy_keyboard
 
-# Имитация функций бота
-def get_rate(currency_from, currency_to, mock_rates=None):
-    """Тестируемая функция расчета курса"""
-    if mock_rates:
-        return mock_rates.get(f"{currency_from}_{currency_to}")
-    return None
-
-def calculate_amount(amount, rate):
-    """Расчет суммы конвертации"""
-    if amount is None or rate is None:
-        return None
-    return amount * rate
-
-def create_order_data(chat_id, buy_currency, sell_currency, amount_rub, amount_btc):
-    """Создание данных заявки"""
-    return {
-        'chat_id': chat_id,
-        'buy_currency': buy_currency,
-        'sell_currency': sell_currency,
-        'amount_rub': amount_rub,
-        'amount_btc': amount_btc,
-        'status': 'pending'
-    }
-
-# ===================================================
-# ТЕСТЫ
-# ===================================================
 
 class TestBotLogic:
     """Тесты бизнес-логики бота"""
-    
-    def test_get_rate_btc_to_rub(self):
+
+    @patch('client_bot.get_btc_rub')
+    def test_get_rate_btc_to_rub(self, mock_btc_rub):
         """Тест 1: Получение курса BTC → RUB"""
-        mock_rates = {
-            'BTC_RUB': 6500000.0
-        }
-        rate = get_rate('BTC', 'RUB', mock_rates)
-        
+        mock_btc_rub.return_value = 6500000.0
+
+        rate = get_rate('BTC', 'RUB')
+
         assert rate == 6500000.0
-    
-    def test_get_rate_rub_to_btc(self):
+        mock_btc_rub.assert_called_once()
+
+    @patch('client_bot.get_btc_rub')
+    def test_get_rate_rub_to_btc(self, mock_btc_rub):
         """Тест 2: Получение курса RUB → BTC (обратный)"""
-        # В реальном коде курс рассчитывается как 1 / BTC_RUB
-        mock_rates = {
-            'BTC_RUB': 6500000.0
-        }
-        btc_rub = get_rate('BTC', 'RUB', mock_rates)
-        rub_btc = 1 / btc_rub if btc_rub else None
-        
-        assert rub_btc is not None
-        assert rub_btc == 1 / 6500000.0
-    
-    def test_calculate_amount_rub_to_btc(self):
-        """Тест 3: Конвертация RUB → BTC"""
-        rate = 1 / 6500000.0  # 1 RUB = 0.0000001538 BTC
-        amount = 10000  # 10 000 RUB
-        
-        result = calculate_amount(amount, rate)
-        
-        expected = 10000 * (1 / 6500000.0)
-        assert result == pytest.approx(expected, rel=1e-6)
-    
-    def test_calculate_amount_btc_to_rub(self):
-        """Тест 4: Конвертация BTC → RUB"""
-        rate = 6500000.0  # 1 BTC = 6 500 000 RUB
-        amount = 0.001  # 0.001 BTC
-        
-        result = calculate_amount(amount, rate)
-        
-        expected = 0.001 * 6500000.0
-        assert result == 6500.0
-    
-    def test_create_order_data(self):
-        """Тест 5: Создание данных заявки"""
+        mock_btc_rub.return_value = 6500000.0
+
+        rate = get_rate('RUB', 'BTC')
+
+        assert rate is not None
+        assert rate == pytest.approx(1 / 6500000.0, rel=1e-6)
+
+    @patch('client_bot.get_btc_rub')
+    def test_get_rate_unknown_pair(self, mock_btc_rub):
+        """Тест 3: Неизвестная валютная пара"""
+        rate = get_rate('ETH', 'USD')
+
+        assert rate is None
+
+    @patch('client_bot.sqlite3.connect')
+    def test_create_order(self, mock_connect):
+        """Тест 4: Создание заявки"""
+        mock_conn = MagicMock()
+        mock_cursor = MagicMock()
+        mock_connect.return_value = mock_conn
+        mock_conn.cursor.return_value = mock_cursor
+        mock_cursor.lastrowid = 1
+
         chat_id = 123456789
         buy_currency = "BTC"
         sell_currency = "RUB"
         amount_rub = 10000
         amount_btc = 0.0015
-        
-        order = create_order_data(chat_id, buy_currency, sell_currency, amount_rub, amount_btc)
-        
-        assert order['chat_id'] == chat_id
-        assert order['buy_currency'] == "BTC"
-        assert order['sell_currency'] == "RUB"
-        assert order['amount_rub'] == 10000
-        assert order['amount_btc'] == 0.0015
-        assert order['status'] == "pending"
-    
-    def test_calculate_amount_with_none(self):
-        """Тест 6: Обработка None значений"""
-        assert calculate_amount(None, 6500000.0) is None
-        assert calculate_amount(10000, None) is None
-        assert calculate_amount(None, None) is None
-    
-    def test_negative_amount(self):
-        """Тест 7: Отрицательная сумма"""
-        rate = 6500000.0
-        amount = -10000
-        
-        result = calculate_amount(amount, rate)
-        
-        assert result == -65000000000.0  # Математически корректно, но бизнес-логика должна отсекать отрицательные суммы
+
+        order_id = create_order(chat_id, buy_currency, sell_currency, amount_rub, amount_btc)
+
+        assert order_id == 1
+        mock_cursor.execute.assert_called()
+
+    def test_get_main_keyboard(self):
+        """Тест 5: Главная клавиатура содержит кнопки"""
+        keyboard = get_main_keyboard()
+
+        assert keyboard is not None
+        assert len(keyboard.keyboard) > 0
+
+    def test_get_buy_keyboard(self):
+        """Тест 6: Клавиатура покупки содержит валюты"""
+        keyboard = get_buy_keyboard()
+
+        assert keyboard is not None
+        assert len(keyboard.keyboard) > 0
+
+    @patch('client_bot.get_btc_rub')
+    def test_calculate_amount_rub_to_btc(self, mock_btc_rub):
+        """Тест 7: Конвертация RUB → BTC"""
+        mock_btc_rub.return_value = 6500000.0
+
+        rate = get_rate('RUB', 'BTC')
+        amount_rub = 10000
+        amount_btc = amount_rub * rate
+
+        assert amount_btc == pytest.approx(10000 / 6500000.0, rel=1e-6)
+
+    @patch('client_bot.get_btc_rub')
+    def test_calculate_amount_btc_to_rub(self, mock_btc_rub):
+        """Тест 8: Конвертация BTC → RUB"""
+        mock_btc_rub.return_value = 6500000.0
+
+        rate = get_rate('BTC', 'RUB')
+        amount_btc = 0.001
+        amount_rub = amount_btc * rate
+
+        assert amount_rub == pytest.approx(6500.0, rel=1e-6)
