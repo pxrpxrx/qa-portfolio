@@ -4,6 +4,7 @@
   "description": "Автотесты для Crypto Arbitrage Bot",
   "main": "test_spread_logic.js",
   "scripts": {
+    "test": "npm run test:all",
     "test:logic": "node test_spread_logic.js",
     "test:api": "node test_api_basic.js",
     "test:all": "npm run test:logic && npm run test:api"

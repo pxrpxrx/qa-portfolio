@@ -124,7 +124,7 @@ pip install -r src/requirements.txt
 
 ### Настройка
 
-1. Скопируйте `src/utilities/config/config.json` и填入те свои API-ключи BingX
+1. Скопируйте `src/utilities/config/config.json` и вставьте свои API-ключи BingX
 2. Отредактируйте `risk_config.json` под свои риск-параметры
 3. По желанию: настройте список мониторинга в `bingx_symbols.json`
 

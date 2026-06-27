@@ -25,3 +25,8 @@ __pycache__/
 
 # Allure
 allure-results/
+
+# Decompilation artifacts
+extracted/
+decompiled/
+cfr.jar

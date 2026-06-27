@@ -38,6 +38,8 @@
 - **Java:** JUnit 5, Mockito, Spring Boot Test, MockMvc, HttpClient, Spring WebSocketClient
 - **Постман:** Postman collection для ручного тестирования
 - **Maven:** `mvn test` для Java-тестов
+- **Docker Compose:** PostgreSQL + Redis для интеграционных тестов
+- **k6:** Нагрузочное тестирование (`performance-tests/load-test-tbank.js`)
 
 ## 6. Критерии качества
 
@@ -53,6 +55,21 @@
 | TC-002 | Инициализация платежа без userId | P1 |
 | TC-003 | Инициализация платежа с отрицательной суммой | P2 |
 | TC-004 | Подключение к WebSocket и получение статуса оплаты | P0 |
+
+## 8. Покрытие тестами
+
+### Unit-тесты (15 тестов)
+- **TinkoffApiServiceTest** (5 тестов): валидация параметров, создание статуса в Redis
+- **PaymentStatusStorageTest** (7 тестов): CRUD операции с Redis, TTL, финальные статусы
+- **QrCodeServiceTest** (5 тестов): генерация QR-кодов, валидация входных данных
+- **SbpControllerTest** (4 теста): обработка запросов, ошибки Tinkoff API
+
+### Интеграционные тесты
+- **PaymentApiIntegrationTest** (15 тестов): REST API (требует запущенный сервер)
+- **WebSocketIntegrationTest** (4 теста): WebSocket подписки (требует запущенный сервер)
+
+### Нагрузочные тесты
+- **k6**: `performance-tests/load-test-tbank.js` (требует запущенный сервер)
 
 ## 8. Окружение
 
