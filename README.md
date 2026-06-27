@@ -12,6 +12,7 @@
 | [fractal_trader_bot](./fractal_trader_bot/) | Торговый бот на фракталах (Python, BingX API) | 25 pytest-тестов, Allure, ruff + mypy, coverage, CI/CD, Postman |
 | [trader_assistant_bot](./trader_assistant_bot/) | Трейлинг-стоп монитор (Python, WebSocket) | 132 pytest-теста, Allure, ruff + mypy, coverage, GitHub Actions |
 | [tbank_qrcode_service](./tbank_qrcode_service/) | Микросервис приёма платежей (Java, Spring Boot) | JUnit 5 + MockMvc тесты, Docker Compose (PostgreSQL + Redis), Postman |
+| [macro-dashboard](./macro-dashboard/) | Мульти-горизонтный макро-анализ (Java 17, FRED/Yahoo/Binance) | 64 JUnit 5 теста, AssertJ, Mockito, Allure, GitHub Actions CI |
 
 ## Инструменты, доказанные в проектах
 
@@ -43,11 +44,13 @@
 ## Результаты
 
 - **174+ Python-теста** проходят в 3 проектах
+- **64 Java-теста** (macro-dashboard): JUnit 5 + AssertJ + Mockito
 - **Java-тесты:** JUnit 5 + MockMvc (tbank_qrcode_service)
 - **JS-тесты:** nock (arbit_bot)
 - **2 Postman-коллекции** с реальных криптобирж (MEXC, Bybit, Bitget, OKX)
 - **Docker Compose:** Java-микросервис + PostgreSQL + Redis
 - **CI:** GitHub Actions на push/PR (ruff + pytest + coverage + maven)
+- **Нагрузка:** k6 (скрипт в `tbank_qrcode_service/performance-tests/`)
 
 ## Контакты
 
