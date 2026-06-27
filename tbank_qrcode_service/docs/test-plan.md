@@ -29,14 +29,13 @@
 |-----|-----------|----------|
 | Модульные (unit) | JUnit 5 + Mockito | Тестирование сервисов изолированно |
 | Интеграционные (Spring) | Spring Boot Test + MockMvc | Тестирование контроллеров |
-| API-тесты | pytest + requests | Черный ящик, реальный сервер |
-| WebSocket-тесты | pytest + websocket-client | Подписка, получение уведомлений |
+| API-тесты | JUnit 5 + HttpClient | Черный ящик, реальный сервер |
+| WebSocket-тесты | JUnit 5 + Spring WebSocketClient | Подписка, получение уведомлений |
 | Ручные | Postman / curl | Исследовательское тестирование |
 
 ## 5. Инструменты
 
-- **Java:** JUnit 5, Mockito, Spring Boot Test, MockMvc
-- **Python:** pytest 7+, requests, websocket-client
+- **Java:** JUnit 5, Mockito, Spring Boot Test, MockMvc, HttpClient, Spring WebSocketClient
 - **Постман:** Postman collection для ручного тестирования
 - **Maven:** `mvn test` для Java-тестов
 

@@ -12,21 +12,3 @@ jobs:
           cache: 'maven'
       - name: Run Java unit tests
         run: mvn test
-  python-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.14'
-      - name: Install deps
-        run: |
-          pip install pytest requests allure-pytest
-      - name: Run integration tests
-        run: |
-          pytest tests/test_api_integration.py --alluredir=allure-results -v || echo "Integration tests skipped (no server)"
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: allure-results
-          path: allure-results/
