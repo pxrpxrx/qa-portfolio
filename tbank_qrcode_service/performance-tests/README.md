@@ -25,12 +25,13 @@
 ```bash
 # Предварительное условие: сервис запущен на localhost:8080
 # Docker: docker-compose up -d
+# Или mock-сервер для тестов: node mock-server.js
 
-# Load test (базовый)
+# Load test (базовый) — генерирует HTML-отчёт
 k6 run load-test.js
 
-# С кастомным URL
-k6 run --env BASE_URL=http://localhost:9090 load-test.js
+# С кастомным URL и путём для отчёта
+k6 run --env BASE_URL=http://localhost:9090 --env REPORT_DIR=./reports load-test.js
 
 # Spike test
 k6 run spike-test.js
@@ -40,11 +41,19 @@ k6 run stress-test.js
 
 # Negative test
 k6 run negative-test.js
-
-# С HTML-отчётом
-k6 run --out json=results.json load-test.js
-# Затем: generate HTML from results.json
 ```
+
+## HTML-отчёты
+
+Load test автоматически генерирует HTML-отчёт в `reports/load-test-report.html`.
+
+Отчёт содержит:
+- Графики RPS и latency
+- Таблицу thresholds (pass/fail)
+- Custom metrics
+- Summary с percentiles
+
+Открой `reports/load-test-report.html` в браузере для просмотра.
 
 ## Thresholds (критерии успеха)
 

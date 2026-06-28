@@ -1,6 +1,8 @@
 import http from 'k6/http';
 import { check, sleep, group } from 'k6';
 import { Counter, Rate, Trend } from 'k6/metrics';
+import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js';
+import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.2/index.js';
 
 // Custom metrics for detailed reporting
 const paymentInitDuration = new Trend('payment_init_duration', true);
@@ -106,4 +108,12 @@ export default function () {
   });
 
   sleep(Math.random() * 2 + 0.5);
+}
+
+export function handleSummary(data) {
+  const reportDir = __ENV.REPORT_DIR || '.';
+  return {
+    [`${reportDir}/load-test-report.html`]: htmlReport(data),
+    stdout: textSummary(data, { indent: '  ', enableColors: true }),
+  };
 }
